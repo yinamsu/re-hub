@@ -7,13 +7,9 @@ import confetti from 'canvas-confetti';
 import { 
   FileSpreadsheet, 
   Download, 
-  CheckCircle2, 
-  XCircle, 
   Scale, 
-  Building2, 
   Sparkles, 
-  Table,
-  CheckSquare
+  Table
 } from 'lucide-react';
 
 interface CourtReportExporterProps {
@@ -49,7 +45,6 @@ export const CourtReportExporter: React.FC<CourtReportExporterProps> = ({ record
 
       const worksheet = workbook.addWorksheet('회생채권 시부인 명세서 (별표2-2)');
 
-      // Set Page Setup for Printing / Court Submission
       worksheet.pageSetup.orientation = 'landscape';
       worksheet.pageSetup.fitToPage = true;
 
@@ -58,16 +53,16 @@ export const CourtReportExporter: React.FC<CourtReportExporterProps> = ({ record
       const titleCell = worksheet.getCell('A1');
       titleCell.value = '추후보완 신고된 회생채권 시·부인 명세서 (별표 2-2)';
       titleCell.font = { name: 'Pretendard', size: 16, bold: true, color: { argb: 'FFFFFFFF' } };
-      titleCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF0F172A' } };
+      titleCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF0F2942' } };
       titleCell.alignment = { horizontal: 'center', vertical: 'middle' };
       worksheet.getRow(1).height = 40;
 
       // Subtitle Info Row
       worksheet.mergeCells('A2:K2');
       const subTitleCell = worksheet.getCell('A2');
-      subTitleCell.value = `사건번호: 2025회단142  |  사건명: (주)알파테크놀로지 회생절차  |  작성일자: ${new Date().toISOString().split('T')[0]}  |  회생관재인 제출용`;
-      subTitleCell.font = { name: 'Pretendard', size: 10, italic: true, color: { argb: 'FF94A3B8' } };
-      subTitleCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF1E293B' } };
+      subTitleCell.value = `사건번호: 2025회단142  |  사건명: (주)알파테크놀로지 회생절차  |  작성일자: ${new Date().toISOString().split('T')[0]}  |  대한민국 회생법원 제출용`;
+      subTitleCell.font = { name: 'Pretendard', size: 10, italic: true, color: { argb: 'FF334E68' } };
+      subTitleCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFE2E8F0' } };
       subTitleCell.alignment = { horizontal: 'center', vertical: 'middle' };
       worksheet.getRow(2).height = 24;
 
@@ -96,17 +91,17 @@ export const CourtReportExporter: React.FC<CourtReportExporterProps> = ({ record
         const cell = headerRow.getCell(i + 1);
         cell.value = h;
         cell.font = { name: 'Pretendard', size: 10, bold: true, color: { argb: 'FFFFFFFF' } };
-        cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF334E68' } };
+        cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF1E3A8A' } };
         cell.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
         cell.border = {
-          top: { style: 'thin', color: { argb: 'FF64748B' } },
-          left: { style: 'thin', color: { argb: 'FF64748B' } },
-          bottom: { style: 'medium', color: { argb: 'FF0F172A' } },
-          right: { style: 'thin', color: { argb: 'FF64748B' } },
+          top: { style: 'thin', color: { argb: 'FF94A3B8' } },
+          left: { style: 'thin', color: { argb: 'FF94A3B8' } },
+          bottom: { style: 'medium', color: { argb: 'FF0F2942' } },
+          right: { style: 'thin', color: { argb: 'FF94A3B8' } },
         };
       });
 
-      // Populate Data Rows starting at Row 5
+      // Data Rows
       let currentRowIdx = 5;
       records.forEach((rec, index) => {
         const row = worksheet.getRow(currentRowIdx);
@@ -124,12 +119,10 @@ export const CourtReportExporter: React.FC<CourtReportExporterProps> = ({ record
         row.getCell(10).value = rec.decision.votingRightAdmitted;
         row.getCell(11).value = rec.decision.reasonText;
 
-        // Styling data cells
         for (let col = 1; col <= 11; col++) {
           const cell = row.getCell(col);
           cell.font = { name: 'Pretendard', size: 9.5 };
 
-          // Alignment
           if (col === 1 || col === 2) {
             cell.alignment = { horizontal: 'center', vertical: 'middle' };
           } else if (col >= 6 && col <= 10) {
@@ -139,7 +132,6 @@ export const CourtReportExporter: React.FC<CourtReportExporterProps> = ({ record
             cell.alignment = { horizontal: 'left', vertical: 'middle' };
           }
 
-          // Borders & Alternate Row Shading
           cell.border = {
             top: { style: 'thin', color: { argb: 'FFE2E8F0' } },
             left: { style: 'thin', color: { argb: 'FFE2E8F0' } },
@@ -155,7 +147,7 @@ export const CourtReportExporter: React.FC<CourtReportExporterProps> = ({ record
         currentRowIdx++;
       });
 
-      // Total Summary Row at Bottom
+      // Total Summary Row
       const totalRow = worksheet.getRow(currentRowIdx);
       totalRow.height = 32;
 
@@ -163,7 +155,7 @@ export const CourtReportExporter: React.FC<CourtReportExporterProps> = ({ record
       worksheet.mergeCells(`A${currentRowIdx}:E${currentRowIdx}`);
 
       const mergedSummaryCell = totalRow.getCell(1);
-      mergedSummaryCell.font = { name: 'Pretendard', size: 10, bold: true, color: { argb: 'FF0F172A' } };
+      mergedSummaryCell.font = { name: 'Pretendard', size: 10, bold: true, color: { argb: 'FF0F2942' } };
       mergedSummaryCell.alignment = { horizontal: 'center', vertical: 'middle' };
 
       totalRow.getCell(6).value = { formula: `SUM(F5:F${currentRowIdx - 1})` };
@@ -171,15 +163,15 @@ export const CourtReportExporter: React.FC<CourtReportExporterProps> = ({ record
       totalRow.getCell(8).value = { formula: `SUM(H5:H${currentRowIdx - 1})` };
       totalRow.getCell(9).value = { formula: `SUM(I5:I${currentRowIdx - 1})` };
       totalRow.getCell(10).value = { formula: `SUM(J5:J${currentRowIdx - 1})` };
-      totalRow.getCell(11).value = `총 ${records.length}건 시부인 심사 완료`;
+      totalRow.getCell(11).value = `총 ${records.length}건 심사 완료`;
 
       for (let col = 1; col <= 11; col++) {
         const cell = totalRow.getCell(col);
         cell.font = { name: 'Pretendard', size: 10, bold: true };
         cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFE2E8F0' } };
         cell.border = {
-          top: { style: 'medium', color: { argb: 'FF0F172A' } },
-          bottom: { style: 'double', color: { argb: 'FF0F172A' } },
+          top: { style: 'medium', color: { argb: 'FF0F2942' } },
+          bottom: { style: 'double', color: { argb: 'FF0F2942' } },
           left: { style: 'thin', color: { argb: 'FFCBD5E1' } },
           right: { style: 'thin', color: { argb: 'FFCBD5E1' } },
         };
@@ -189,7 +181,6 @@ export const CourtReportExporter: React.FC<CourtReportExporterProps> = ({ record
         }
       }
 
-      // Auto Column Widths
       worksheet.columns = [
         { width: 8 },  // 순번
         { width: 14 }, // 신고번호
@@ -204,7 +195,6 @@ export const CourtReportExporter: React.FC<CourtReportExporterProps> = ({ record
         { width: 38 }, // 시부인사유
       ];
 
-      // Export file to browser
       const buffer = await workbook.xlsx.writeBuffer();
       const blob = new Blob([buffer], {
         type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
@@ -216,7 +206,6 @@ export const CourtReportExporter: React.FC<CourtReportExporterProps> = ({ record
       a.click();
       window.URL.revokeObjectURL(url);
 
-      // Celebration Confetti
       confetti({
         particleCount: 120,
         spread: 80,
@@ -233,33 +222,33 @@ export const CourtReportExporter: React.FC<CourtReportExporterProps> = ({ record
   return (
     <div className="max-w-7xl mx-auto space-y-8 pb-16">
       {/* Top Banner & Export Trigger */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+      <div className="bg-white border border-slate-300 rounded-2xl p-6 shadow-md border-t-4 border-t-blue-900 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
         <div>
-          <div className="flex items-center space-x-2 text-amber-400 mb-1">
-            <Sparkles className="w-5 h-5" />
-            <span className="text-xs font-bold uppercase tracking-wider">Step 3. Output Generator</span>
+          <div className="flex items-center space-x-2 text-blue-900 font-bold text-xs mb-1">
+            <Scale className="w-4 h-4 text-blue-700" />
+            <span>Step 3. Output Generator</span>
           </div>
-          <h2 className="text-2xl font-black text-white">대한민국 회생법원 표준 양식 Excel 출력</h2>
-          <p className="text-slate-400 text-sm mt-1">
-            서울회생법원 규칙 표준 서식 『추후보완 신고된 회생채권 시·부인 명세서 (별표 2-2)』로 즉시 산출됩니다.
+          <h2 className="text-2xl font-black text-slate-900">대한민국 회생법원 제출용 표준 명세서 Excel 출력</h2>
+          <p className="text-slate-600 text-sm mt-1">
+            서울회생법원 실무 규칙 서식 『추후보완 신고된 회생채권 시·부인 명세서 (별표 2-2)』 규격으로 즉시 출력됩니다.
           </p>
         </div>
 
         <button
           onClick={handleExportExcel}
           disabled={isExporting}
-          className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-extrabold text-sm px-6 py-3.5 rounded-xl shadow-xl shadow-emerald-900/30 flex items-center space-x-2 transition-all transform hover:scale-105 disabled:opacity-50"
+          className="bg-blue-900 hover:bg-blue-800 text-white font-extrabold text-sm px-6 py-3.5 rounded-xl shadow-md flex items-center space-x-2 transition-all disabled:opacity-50"
         >
           <Download className="w-5 h-5" />
-          <span>{isExporting ? 'Excel 파일 생성 중...' : '법원 제출용 Excel (.xlsx) 다운로드'}</span>
+          <span>{isExporting ? 'Excel 생성 중...' : '법원 제출용 Excel (.xlsx) 다운로드'}</span>
         </button>
       </div>
 
       {/* Live Totals Cards Grid */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-slate-900 p-5 rounded-2xl border border-slate-800 shadow-lg">
-          <div className="text-xs text-slate-400 font-medium">총 신고 금액 (원금+이자)</div>
-          <div className="text-xl font-black text-slate-100 font-mono mt-1">
+        <div className="bg-white p-5 rounded-2xl border border-slate-300 shadow-sm">
+          <div className="text-xs text-slate-500 font-medium">총 신고 금액 (원금+이자)</div>
+          <div className="text-xl font-black text-slate-900 font-mono mt-1">
             {totalDeclared.toLocaleString()} 원
           </div>
           <div className="text-[11px] text-slate-500 mt-1 font-mono">
@@ -267,119 +256,119 @@ export const CourtReportExporter: React.FC<CourtReportExporterProps> = ({ record
           </div>
         </div>
 
-        <div className="bg-slate-900 p-5 rounded-2xl border border-emerald-900/60 bg-emerald-950/20 shadow-lg">
-          <div className="text-xs text-emerald-400 font-bold">관재인 총 시인액</div>
-          <div className="text-xl font-black text-emerald-400 font-mono mt-1">
+        <div className="bg-white p-5 rounded-2xl border border-emerald-300 shadow-sm bg-emerald-50/30">
+          <div className="text-xs text-emerald-900 font-bold">관재인 총 시인액</div>
+          <div className="text-xl font-black text-emerald-800 font-mono mt-1">
             {totalAdmitted.toLocaleString()} 원
           </div>
-          <div className="text-[11px] text-emerald-300/80 mt-1">
+          <div className="text-[11px] text-emerald-900 mt-1 font-semibold">
             {admittedCount}건 전액시인 / {partialCount}건 일부시인
           </div>
         </div>
 
-        <div className="bg-slate-900 p-5 rounded-2xl border border-rose-900/60 bg-rose-950/20 shadow-lg">
-          <div className="text-xs text-rose-400 font-bold">총 부인액</div>
-          <div className="text-xl font-black text-rose-400 font-mono mt-1">
+        <div className="bg-white p-5 rounded-2xl border border-rose-300 shadow-sm bg-rose-50/30">
+          <div className="text-xs text-rose-900 font-bold">총 부인액</div>
+          <div className="text-xl font-black text-rose-800 font-mono mt-1">
             {totalDenied.toLocaleString()} 원
           </div>
-          <div className="text-[11px] text-rose-300/80 mt-1">
+          <div className="text-[11px] text-rose-900 mt-1 font-semibold">
             {deniedCount}건 전액부인 처리 완료
           </div>
         </div>
 
-        <div className="bg-slate-900 p-5 rounded-2xl border border-indigo-900/60 bg-indigo-950/20 shadow-lg">
-          <div className="text-xs text-indigo-300 font-bold">총 의결권 인정액</div>
-          <div className="text-xl font-black text-indigo-300 font-mono mt-1">
+        <div className="bg-white p-5 rounded-2xl border border-blue-300 shadow-sm bg-blue-50/30">
+          <div className="text-xs text-blue-900 font-bold">총 의결권 인정액</div>
+          <div className="text-xl font-black text-blue-900 font-mono mt-1">
             {totalVotingAdmitted.toLocaleString()} 원
           </div>
-          <div className="text-[11px] text-indigo-400 mt-1 font-semibold">
+          <div className="text-[11px] text-blue-900 mt-1 font-bold">
             조정 시인율: {Math.round((totalAdmitted / (totalDeclared || 1)) * 100)}%
           </div>
         </div>
       </div>
 
       {/* Live Table Preview Section */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
-        <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-          <div className="flex items-center space-x-2 text-slate-200">
-            <Table className="w-5 h-5 text-indigo-400" />
+      <div className="bg-white border border-slate-300 rounded-2xl p-6 shadow-sm space-y-4">
+        <div className="flex items-center justify-between border-b border-slate-200 pb-3">
+          <div className="flex items-center space-x-2 text-slate-900">
+            <Table className="w-5 h-5 text-blue-900" />
             <h3 className="font-extrabold text-base">법원 서식 실시간 미리보기 (별표 2-2 양식)</h3>
           </div>
-          <span className="text-xs text-slate-400 font-mono">총 {records.length}개 채권 심사 항목</span>
+          <span className="text-xs text-slate-500 font-mono">총 {records.length}개 채권 심사 항목</span>
         </div>
 
         {/* Scrollable Court Form Table */}
-        <div className="overflow-x-auto border border-slate-800 rounded-xl">
-          <table className="w-full text-left text-xs text-slate-300 border-collapse font-sans">
-            <thead className="bg-slate-950 text-slate-300 text-[11px] uppercase font-bold border-b border-slate-800">
+        <div className="overflow-x-auto border border-slate-300 rounded-xl">
+          <table className="w-full text-left text-xs text-slate-900 border-collapse font-sans">
+            <thead className="bg-slate-100 text-slate-800 text-[11px] uppercase font-bold border-b border-slate-300">
               <tr>
-                <th className="p-3 text-center border-r border-slate-800">순번</th>
-                <th className="p-3 text-center border-r border-slate-800">신고번호</th>
-                <th className="p-3 border-r border-slate-800">채권자명</th>
-                <th className="p-3 border-r border-slate-800">채권내용</th>
-                <th className="p-3 text-right border-r border-slate-800">신고 원금</th>
-                <th className="p-3 text-right border-r border-slate-800">신고 이자</th>
-                <th className="p-3 text-right border-r border-slate-800 text-emerald-400">관재인 시인액</th>
-                <th className="p-3 text-right border-r border-slate-800 text-rose-400">부인액</th>
-                <th className="p-3 text-right border-r border-slate-800 text-indigo-300">의결권 인정액</th>
+                <th className="p-3 text-center border-r border-slate-300">순번</th>
+                <th className="p-3 text-center border-r border-slate-300">신고번호</th>
+                <th className="p-3 border-r border-slate-300">채권자명</th>
+                <th className="p-3 border-r border-slate-300">채권내용</th>
+                <th className="p-3 text-right border-r border-slate-300">신고 원금</th>
+                <th className="p-3 text-right border-r border-slate-300">신고 이자</th>
+                <th className="p-3 text-right border-r border-slate-300 text-emerald-800">관재인 시인액</th>
+                <th className="p-3 text-right border-r border-slate-300 text-rose-800">부인액</th>
+                <th className="p-3 text-right border-r border-slate-300 text-blue-900">의결권 인정액</th>
                 <th className="p-3">시부인 사유</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/60 bg-slate-900/60">
+            <tbody className="divide-y divide-slate-200 bg-white">
               {records.map((rec, idx) => (
-                <tr key={rec.id} className="hover:bg-slate-800/50 transition-colors">
-                  <td className="p-3 text-center font-mono text-slate-500 border-r border-slate-800">
+                <tr key={rec.id} className="hover:bg-slate-50 transition-colors">
+                  <td className="p-3 text-center font-mono text-slate-500 border-r border-slate-200">
                     {idx + 1}
                   </td>
-                  <td className="p-3 text-center font-mono font-bold text-indigo-400 border-r border-slate-800">
+                  <td className="p-3 text-center font-mono font-bold text-blue-900 border-r border-slate-200">
                     {rec.creditor.filingNo}
                   </td>
-                  <td className="p-3 font-extrabold text-slate-100 border-r border-slate-800">
+                  <td className="p-3 font-extrabold text-slate-900 border-r border-slate-200">
                     {rec.creditor.creditorName}
                   </td>
-                  <td className="p-3 text-slate-300 border-r border-slate-800">
+                  <td className="p-3 text-slate-700 border-r border-slate-200">
                     {rec.creditor.claimType}
                   </td>
-                  <td className="p-3 text-right font-mono text-slate-200 border-r border-slate-800">
+                  <td className="p-3 text-right font-mono text-slate-900 border-r border-slate-200">
                     {rec.creditor.declaredPrincipal.toLocaleString()}원
                   </td>
-                  <td className="p-3 text-right font-mono text-slate-400 border-r border-slate-800">
+                  <td className="p-3 text-right font-mono text-slate-600 border-r border-slate-200">
                     {rec.creditor.declaredInterest.toLocaleString()}원
                   </td>
-                  <td className="p-3 text-right font-mono font-extrabold text-emerald-400 border-r border-slate-800">
+                  <td className="p-3 text-right font-mono font-extrabold text-emerald-800 border-r border-slate-200">
                     {rec.decision.admittedTotal.toLocaleString()}원
                   </td>
-                  <td className="p-3 text-right font-mono font-extrabold text-rose-400 border-r border-slate-800">
+                  <td className="p-3 text-right font-mono font-extrabold text-rose-800 border-r border-slate-200">
                     {rec.decision.deniedAmount.toLocaleString()}원
                   </td>
-                  <td className="p-3 text-right font-mono font-extrabold text-indigo-300 border-r border-slate-800">
+                  <td className="p-3 text-right font-mono font-extrabold text-blue-900 border-r border-slate-200">
                     {rec.decision.votingRightAdmitted.toLocaleString()}원
                   </td>
-                  <td className="p-3 text-slate-300 text-[11px]">
+                  <td className="p-3 text-slate-700 text-[11px]">
                     {rec.decision.reasonText}
                   </td>
                 </tr>
               ))}
             </tbody>
             {/* Table Footer Totals */}
-            <tfoot className="bg-slate-950 font-bold text-xs text-slate-100 border-t-2 border-slate-700">
+            <tfoot className="bg-slate-100 font-bold text-xs text-slate-900 border-t-2 border-slate-300">
               <tr>
-                <td colSpan={4} className="p-3 text-center border-r border-slate-800">
+                <td colSpan={4} className="p-3 text-center border-r border-slate-300">
                   합 계 (총 {records.length}건)
                 </td>
-                <td className="p-3 text-right font-mono border-r border-slate-800">
+                <td className="p-3 text-right font-mono border-r border-slate-300">
                   {totalDeclaredPrincipal.toLocaleString()}원
                 </td>
-                <td className="p-3 text-right font-mono border-r border-slate-800">
+                <td className="p-3 text-right font-mono border-r border-slate-300">
                   {totalDeclaredInterest.toLocaleString()}원
                 </td>
-                <td className="p-3 text-right font-mono text-emerald-400 border-r border-slate-800">
+                <td className="p-3 text-right font-mono text-emerald-800 border-r border-slate-300">
                   {totalAdmitted.toLocaleString()}원
                 </td>
-                <td className="p-3 text-right font-mono text-rose-400 border-r border-slate-800">
+                <td className="p-3 text-right font-mono text-rose-800 border-r border-slate-300">
                   {totalDenied.toLocaleString()}원
                 </td>
-                <td className="p-3 text-right font-mono text-indigo-300 border-r border-slate-800">
+                <td className="p-3 text-right font-mono text-blue-900 border-r border-slate-300">
                   {totalVotingAdmitted.toLocaleString()}원
                 </td>
                 <td className="p-3 text-slate-500 font-normal">

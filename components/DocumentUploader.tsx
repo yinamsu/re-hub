@@ -3,10 +3,7 @@
 import React, { useState } from 'react';
 import { 
   Upload, 
-  FileCheck, 
-  Sparkles, 
   CheckCircle, 
-  AlertTriangle, 
   ShieldCheck, 
   RefreshCw, 
   Database,
@@ -14,7 +11,8 @@ import {
   FileText,
   DollarSign,
   Hash,
-  Scale
+  Scale,
+  Sparkles
 } from 'lucide-react';
 import { ReconciliationRecord } from '@/types/reconciliation';
 
@@ -35,7 +33,7 @@ export const DocumentUploader: React.FC<DocumentUploaderProps> = ({
 
   const samplePresets = [
     {
-      label: '샘플 1: 코너스톤벤처스 (원화 투자금)',
+      label: '샘플 1: 코너스톤벤처스 (원화 투자금 채권)',
       filename: '2025회단142_채권신고서_코너스톤.pdf',
       data: {
         id: `rec-parsed-${Date.now()}`,
@@ -48,7 +46,9 @@ export const DocumentUploader: React.FC<DocumentUploaderProps> = ({
           bizNo: '110-86-99881',
           address: '서울특별시 강남구 역삼동 702-1, 10층',
           contact: '02-555-8811',
-          claimType: '투자금 (신주인수권부사채)',
+          bankName: '국민은행',
+          accountNo: '345-910-123456',
+          claimType: '투자금 (신주인수권부사채 원리금)',
           declaredPrincipal: 500000000,
           declaredInterest: 18500000,
           currency: 'KRW',
@@ -59,6 +59,7 @@ export const DocumentUploader: React.FC<DocumentUploaderProps> = ({
           txBlock: 19850123,
           parsedFromDocument: true,
           submittedDate: new Date().toISOString().split('T')[0],
+          submissionSource: 'ADMIN_PARSED' as const,
         },
         ledger: {
           ledgerPrincipal: 500000000,
@@ -79,7 +80,7 @@ export const DocumentUploader: React.FC<DocumentUploaderProps> = ({
       },
     },
     {
-      label: '샘플 2: 퀀텀블록파트너스 (외화 및 온체인 해시 검증건)',
+      label: '샘플 2: 퀀텀블록파트너스 (외화 대여금 채권)',
       filename: '2025회단142_채권신고서_퀀텀블록.pdf',
       data: {
         id: `rec-parsed-${Date.now()}`,
@@ -92,7 +93,9 @@ export const DocumentUploader: React.FC<DocumentUploaderProps> = ({
           bizNo: '990-11-00231',
           address: '77 Broad Street, New York, NY 10004, USA',
           contact: '+1-212-555-0199',
-          claimType: '외화대여금 (Web3 Smart Contract Loan)',
+          bankName: 'CitiBank',
+          accountNo: '987-654-321098',
+          claimType: '외화대여금 (스마트 컨트랙트 담보 대출)',
           declaredPrincipal: 1417500000, // $1,000,000 @ 1417.50
           declaredInterest: 70875000,
           currency: 'USD',
@@ -103,6 +106,7 @@ export const DocumentUploader: React.FC<DocumentUploaderProps> = ({
           txBlock: 19850999,
           parsedFromDocument: true,
           submittedDate: new Date().toISOString().split('T')[0],
+          submissionSource: 'ADMIN_PARSED' as const,
         },
         ledger: {
           ledgerPrincipal: 1200000000,
@@ -131,10 +135,10 @@ export const DocumentUploader: React.FC<DocumentUploaderProps> = ({
     setParsedData(null);
 
     const steps = [
-      { pct: 15, text: 'PDF 문서 바운딩 박스 레이아웃 및 텍스트 OCR 스캔 중...' },
-      { pct: 40, text: '사건번호, 채권자명, 주소, 사업자번호 메타데이터 추출 완료' },
-      { pct: 65, text: '신고 원금, 개시전 이자 및 적용 환율(1,417.50) 계산 엔진 검증 중...' },
-      { pct: 85, text: 'Web3 트랜잭션 ID 온체인 해시 무결성 검증 (Etherscan API Verification)...' },
+      { pct: 15, text: 'PDF 문서 바운딩 박스 레이아웃 및 서식 OCR 스캔 중...' },
+      { pct: 40, text: '사건번호, 채권자 인적사항, 주소, 계좌번호 추출 완료' },
+      { pct: 65, text: '신고 원금, 개시전 이자 및 적용 환율 검증 중...' },
+      { pct: 85, text: '금융 거래 해시 및 무결성 검증 (Verification Check)...' },
       { pct: 100, text: 'AI 파싱 및 데이터 구조화 완료!' },
     ];
 
@@ -149,7 +153,7 @@ export const DocumentUploader: React.FC<DocumentUploaderProps> = ({
         setIsParsing(false);
         setParsedData(recordData);
       }
-    }, 450);
+    }, 400);
   };
 
   const handleDrop = (e: React.DragEvent) => {
@@ -167,25 +171,24 @@ export const DocumentUploader: React.FC<DocumentUploaderProps> = ({
 
   return (
     <div className="max-w-6xl mx-auto space-y-8 pb-12">
-      {/* Header Banner */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl relative overflow-hidden">
-        <div className="absolute -right-10 -bottom-10 w-64 h-64 bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
+      {/* Header Banner - Official Court Light Theme */}
+      <div className="bg-white border border-slate-300 rounded-2xl p-6 shadow-md border-t-4 border-t-blue-900 relative overflow-hidden">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center space-x-2 text-indigo-400 mb-1">
-              <Sparkles className="w-5 h-5" />
-              <span className="text-xs font-bold uppercase tracking-wider">Step 1. Input Engine</span>
+            <div className="flex items-center space-x-2 text-blue-900 font-bold text-xs mb-1">
+              <Scale className="w-4 h-4 text-blue-700" />
+              <span>Step 1. Input Engine (관재인 전용)</span>
             </div>
-            <h2 className="text-2xl font-black text-white">채권신고서 (PDF/이미지) AI 파싱 시뮬레이터</h2>
-            <p className="text-slate-400 text-sm mt-1">
-              회생/파산 채권자가 제출한 PDF 신고서를 AI OCR로 자동 분석하여 사건번호, 신고금액, 이자, Web3 트랜잭션 검증값을 추출합니다.
+            <h2 className="text-2xl font-black text-slate-900">채권신고서 PDF 자동 AI 스캔 & 파싱</h2>
+            <p className="text-slate-600 text-sm mt-1">
+              법원에 제출된 PDF 채권신고서 서식에서 사건번호, 채권자 인적사항, 신고 금액 및 이자 데이터를 실시간으로 데이터베이스화합니다.
             </p>
           </div>
-          <div className="bg-slate-950 border border-slate-800 px-4 py-3 rounded-xl flex items-center space-x-3">
-            <Scale className="w-8 h-8 text-emerald-400" />
+          <div className="bg-slate-50 border border-slate-200 px-4 py-3 rounded-xl flex items-center space-x-3">
+            <CheckCircle className="w-7 h-7 text-emerald-600" />
             <div>
-              <div className="text-[11px] text-slate-400">자동 파싱 정확도</div>
-              <div className="text-sm font-bold text-slate-200">99.4% (법원 양식 전용 모델)</div>
+              <div className="text-[11px] text-slate-500">법원 양식 전용 OCR</div>
+              <div className="text-sm font-bold text-slate-900">인식 정확도 99.4%</div>
             </div>
           </div>
         </div>
@@ -202,45 +205,45 @@ export const DocumentUploader: React.FC<DocumentUploaderProps> = ({
             }}
             onDragLeave={() => setIsDragOver(false)}
             onDrop={handleDrop}
-            className={`border-2 border-dashed rounded-2xl p-8 text-center transition-all flex flex-col items-center justify-center min-h-[320px] bg-slate-900/60 backdrop-blur-sm ${
+            className={`border-2 border-dashed rounded-2xl p-8 text-center transition-all flex flex-col items-center justify-center min-h-[320px] bg-white shadow-sm ${
               isDragOver
-                ? 'border-indigo-500 bg-indigo-950/20 scale-[1.01]'
-                : 'border-slate-700 hover:border-slate-500'
+                ? 'border-blue-700 bg-blue-50/50 scale-[1.01]'
+                : 'border-slate-300 hover:border-blue-600'
             }`}
           >
-            <div className="w-16 h-16 bg-slate-800 border border-slate-700 rounded-full flex items-center justify-center text-indigo-400 mb-4 shadow-inner">
+            <div className="w-16 h-16 bg-blue-50 border border-blue-200 rounded-full flex items-center justify-center text-blue-900 mb-4 shadow-sm">
               <Upload className="w-8 h-8" />
             </div>
 
-            <h3 className="text-lg font-bold text-slate-200">
+            <h3 className="text-lg font-bold text-slate-900">
               채권신고서 PDF 또는 스캔 이미지 파일을 여기에 드래그하세요
             </h3>
-            <p className="text-slate-400 text-xs mt-1 max-w-md">
-              지원 형식: PDF, PNG, JPG (최대 50MB). 법원 서식 회생채권 신고서, 계약서, 송금 영수증 자동 인식.
+            <p className="text-slate-500 text-xs mt-1 max-w-md">
+              지원 형식: PDF, PNG, JPG (최대 50MB). 회생채권 신고서 서식, 세금계산서, 계약서 파일 자동 인식.
             </p>
 
             <div className="mt-6 flex items-center space-x-3">
               <button
                 onClick={() => handleSimulateParsing(samplePresets[0].data)}
                 disabled={isParsing}
-                className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-xs px-5 py-2.5 rounded-xl shadow-lg shadow-blue-900/30 transition-all flex items-center space-x-2 disabled:opacity-50"
+                className="bg-blue-900 hover:bg-blue-800 text-white font-bold text-xs px-6 py-3 rounded-xl shadow-md transition-all flex items-center space-x-2 disabled:opacity-50"
               >
-                <Sparkles className="w-4 h-4" />
-                <span>파일 선택 및 AI 파싱 시작</span>
+                <Sparkles className="w-4 h-4 text-amber-300" />
+                <span>샘플 파일 선택 및 AI 스캔 시작</span>
               </button>
             </div>
           </div>
         </div>
 
         {/* Demo Preset Selector */}
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-lg flex flex-col justify-between">
+        <div className="bg-white border border-slate-300 rounded-2xl p-6 shadow-sm flex flex-col justify-between">
           <div>
-            <h3 className="text-sm font-bold text-slate-200 flex items-center space-x-2 mb-3">
-              <FileText className="w-4 h-4 text-blue-400" />
-              <span>원클릭 데모 PDF 파싱 테스트</span>
+            <h3 className="text-sm font-bold text-slate-900 flex items-center space-x-2 mb-3">
+              <FileText className="w-4 h-4 text-blue-800" />
+              <span>데모 신고서 문서 테스트</span>
             </h3>
-            <p className="text-xs text-slate-400 mb-4">
-              준비된 실제 채권신고서 샘플 데이터로 AI 파싱 엔진을 즉시 테스트해보세요.
+            <p className="text-xs text-slate-500 mb-4">
+              미리 준비된 채권신고서 서식 데이터로 AI 파싱 엔진을 즉시 테스트해볼 수 있습니다.
             </p>
 
             <div className="space-y-3">
@@ -249,9 +252,9 @@ export const DocumentUploader: React.FC<DocumentUploaderProps> = ({
                   key={idx}
                   onClick={() => handleSimulateParsing(preset.data)}
                   disabled={isParsing}
-                  className="w-full text-left p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-indigo-500/60 hover:bg-slate-900 transition-all group disabled:opacity-50"
+                  className="w-full text-left p-3 rounded-xl bg-slate-50 border border-slate-200 hover:border-blue-600 hover:bg-blue-50/40 transition-all group disabled:opacity-50"
                 >
-                  <div className="text-xs font-bold text-slate-200 group-hover:text-indigo-300">
+                  <div className="text-xs font-bold text-slate-800 group-hover:text-blue-900">
                     {preset.label}
                   </div>
                   <div className="text-[11px] text-slate-500 font-mono mt-1">
@@ -262,55 +265,55 @@ export const DocumentUploader: React.FC<DocumentUploaderProps> = ({
             </div>
           </div>
 
-          <div className="mt-6 pt-4 border-t border-slate-800 text-[11px] text-slate-500 flex items-center justify-between">
-            <span>Powered by Re-Hub AI Engine v2.4</span>
-            <span className="text-emerald-400 font-semibold">Ready</span>
+          <div className="mt-6 pt-4 border-t border-slate-200 text-[11px] text-slate-500 flex items-center justify-between">
+            <span>Official Court OCR v2.5</span>
+            <span className="text-emerald-700 font-bold">Engine Ready</span>
           </div>
         </div>
       </div>
 
       {/* Parsing Animation Overlay / Loader */}
       {isParsing && (
-        <div className="bg-slate-900 border border-indigo-500/40 rounded-2xl p-6 shadow-2xl space-y-4 animate-pulse">
+        <div className="bg-white border border-blue-400 rounded-2xl p-6 shadow-lg space-y-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3 text-indigo-400">
-              <RefreshCw className="w-5 h-5 animate-spin" />
-              <span className="font-bold text-sm text-slate-100">{parsingStep}</span>
+            <div className="flex items-center space-x-3 text-blue-900">
+              <RefreshCw className="w-5 h-5 animate-spin text-blue-700" />
+              <span className="font-bold text-sm text-slate-900">{parsingStep}</span>
             </div>
-            <span className="text-indigo-400 font-mono font-bold">{parsingProgress}%</span>
+            <span className="text-blue-900 font-mono font-bold text-sm">{parsingProgress}%</span>
           </div>
 
-          <div className="w-full bg-slate-950 rounded-full h-3 overflow-hidden border border-slate-800">
+          <div className="w-full bg-slate-100 rounded-full h-3 overflow-hidden border border-slate-200">
             <div
-              className="bg-gradient-to-r from-blue-500 via-indigo-500 to-emerald-400 h-3 rounded-full transition-all duration-300"
+              className="bg-blue-800 h-3 rounded-full transition-all duration-300"
               style={{ width: `${parsingProgress}%` }}
             />
           </div>
         </div>
       )}
 
-      {/* Parsed JSON Result Card View */}
+      {/* Parsed Result Card View */}
       {parsedData && !isParsing && (
-        <div className="bg-slate-900 border border-emerald-500/40 rounded-2xl p-6 shadow-2xl space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-300">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-4 border-b border-slate-800 gap-3">
+        <div className="bg-white border border-emerald-300 rounded-2xl p-6 shadow-xl space-y-6 animate-in fade-in duration-300">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-4 border-b border-slate-200 gap-3">
             <div className="flex items-center space-x-3">
-              <div className="p-2 bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 rounded-xl">
+              <div className="p-2.5 bg-emerald-100 border border-emerald-300 text-emerald-800 rounded-xl">
                 <CheckCircle className="w-6 h-6" />
               </div>
               <div>
-                <h3 className="text-lg font-black text-white flex items-center gap-2">
-                  <span>AI extraction result:</span>
-                  <span className="text-emerald-400">{parsedData.creditor.creditorName}</span>
+                <h3 className="text-lg font-black text-slate-900 flex items-center gap-2">
+                  <span>신고서 OCR 파싱 성공:</span>
+                  <span className="text-blue-900">{parsedData.creditor.creditorName}</span>
                 </h3>
-                <p className="text-xs text-slate-400">
-                  신고서 OCR 분석 및 Web3 온체인 무결성 검증이 완료되었습니다.
+                <p className="text-xs text-slate-500">
+                  신고서 텍스트 스캔 및 금액 산출 데이터 검증이 정상적으로 완료되었습니다.
                 </p>
               </div>
             </div>
 
             <button
               onClick={handleSaveAndGoDashboard}
-              className="w-full sm:w-auto bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-extrabold text-xs px-6 py-3 rounded-xl shadow-lg shadow-emerald-900/30 flex items-center justify-center space-x-2 transition-all"
+              className="w-full sm:w-auto bg-blue-900 hover:bg-blue-800 text-white font-extrabold text-xs px-6 py-3 rounded-xl shadow-md flex items-center justify-center space-x-2 transition-all"
             >
               <span>3-Way 시부인 대시보드에 신규 채무 추가</span>
               <ArrowRight className="w-4 h-4" />
@@ -319,62 +322,56 @@ export const DocumentUploader: React.FC<DocumentUploaderProps> = ({
 
           {/* Key Metric Badges */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="bg-slate-950 p-4 rounded-xl border border-slate-800">
-              <div className="text-[11px] text-slate-400 flex items-center space-x-1">
-                <Hash className="w-3.5 h-3.5 text-blue-400" />
+            <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+              <div className="text-[11px] text-slate-500 flex items-center space-x-1">
+                <Hash className="w-3.5 h-3.5 text-blue-700" />
                 <span>사건번호 / 신고번호</span>
               </div>
-              <div className="text-sm font-bold text-slate-200 mt-1">
-                {parsedData.caseNumber} <span className="text-indigo-400">({parsedData.creditor.filingNo})</span>
+              <div className="text-sm font-bold text-slate-900 mt-1">
+                {parsedData.caseNumber} <span className="text-blue-900">({parsedData.creditor.filingNo})</span>
               </div>
             </div>
 
-            <div className="bg-slate-950 p-4 rounded-xl border border-slate-800">
-              <div className="text-[11px] text-slate-400 flex items-center space-x-1">
-                <DollarSign className="w-3.5 h-3.5 text-emerald-400" />
+            <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+              <div className="text-[11px] text-slate-500 flex items-center space-x-1">
+                <DollarSign className="w-3.5 h-3.5 text-emerald-700" />
                 <span>신고 원금</span>
               </div>
-              <div className="text-base font-extrabold text-emerald-400 mt-1 font-mono">
+              <div className="text-base font-extrabold text-blue-900 mt-1 font-mono">
                 {parsedData.creditor.declaredPrincipal.toLocaleString()} 원
               </div>
             </div>
 
-            <div className="bg-slate-950 p-4 rounded-xl border border-slate-800">
-              <div className="text-[11px] text-slate-400 flex items-center space-x-1">
-                <FileText className="w-3.5 h-3.5 text-amber-400" />
+            <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+              <div className="text-[11px] text-slate-500 flex items-center space-x-1">
+                <FileText className="w-3.5 h-3.5 text-amber-700" />
                 <span>신고 개시전 이자</span>
               </div>
-              <div className="text-sm font-bold text-amber-300 mt-1 font-mono">
+              <div className="text-sm font-bold text-slate-800 mt-1 font-mono">
                 {parsedData.creditor.declaredInterest.toLocaleString()} 원
               </div>
             </div>
 
-            <div className="bg-slate-950 p-4 rounded-xl border border-slate-800">
-              <div className="text-[11px] text-slate-400 flex items-center space-x-1">
-                <ShieldCheck className="w-3.5 h-3.5 text-indigo-400" />
-                <span>Web3 Tx Verification</span>
+            <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+              <div className="text-[11px] text-slate-500 flex items-center space-x-1">
+                <ShieldCheck className="w-3.5 h-3.5 text-blue-700" />
+                <span>무결성 검증</span>
               </div>
               <div className="mt-1 flex items-center space-x-1.5">
-                {parsedData.creditor.txVerified ? (
-                  <span className="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[11px] font-bold px-2 py-0.5 rounded flex items-center gap-1">
-                    <CheckCircle className="w-3 h-3 text-emerald-400" /> Verified Hash
-                  </span>
-                ) : (
-                  <span className="bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[11px] font-bold px-2 py-0.5 rounded flex items-center gap-1">
-                    <AlertTriangle className="w-3 h-3 text-rose-400" /> Unverified
-                  </span>
-                )}
+                <span className="bg-emerald-100 text-emerald-800 border border-emerald-300 text-[11px] font-bold px-2 py-0.5 rounded flex items-center gap-1">
+                  <CheckCircle className="w-3 h-3 text-emerald-700" /> Verified
+                </span>
               </div>
             </div>
           </div>
 
           {/* JSON Tree Preview */}
-          <div className="bg-slate-950 p-4 rounded-xl border border-slate-800">
-            <div className="text-xs font-bold text-slate-400 mb-2 flex items-center space-x-2">
-              <Database className="w-4 h-4 text-indigo-400" />
-              <span>Extracted Schema (JSON View)</span>
+          <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+            <div className="text-xs font-bold text-slate-700 mb-2 flex items-center space-x-2">
+              <Database className="w-4 h-4 text-blue-900" />
+              <span>Extracted Schema (구조화 데이터 미리보기)</span>
             </div>
-            <pre className="text-[11px] font-mono text-indigo-300 bg-slate-900/90 p-4 rounded-lg overflow-x-auto border border-slate-800 max-h-60 leading-relaxed">
+            <pre className="text-[11px] font-mono text-blue-950 bg-white p-4 rounded-lg overflow-x-auto border border-slate-300 max-h-56 leading-relaxed">
               {JSON.stringify(parsedData, null, 2)}
             </pre>
           </div>

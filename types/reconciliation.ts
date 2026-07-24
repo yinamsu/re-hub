@@ -7,7 +7,10 @@ export interface CreditorClaim {
   bizNo?: string; // 사업자등록번호 / 주민번호
   address: string; // 주소
   contact?: string; // 연락처
-  claimType: string; // 채권내용 (e.g., "대여금", "투자금", "물품대금")
+  bankName?: string; // 입금 은행
+  accountNo?: string; // 계좌번호
+  accountHolder?: string; // 예금주
+  claimType: string; // 채권내용 (e.g., "대여금", "상거래 채권", "임금채권", "투자금")
   declaredPrincipal: number; // 신고 원금 (KRW)
   declaredInterest: number; // 신고 개시전이자 (KRW)
   currency: string; // 통화 (KRW, USD, etc.)
@@ -18,6 +21,8 @@ export interface CreditorClaim {
   txBlock?: number;
   parsedFromDocument?: boolean; // AI 파싱 완료 여부
   submittedDate: string; // 신고일자
+  submissionSource?: 'ADMIN_PARSED' | 'CREDITOR_SELF'; // 신고 출처 (관재인 파싱 / 채권자 셀프신고)
+  evidenceFiles?: string[]; // 첨부 증빙 서류 목록
 }
 
 export interface CompanyLedger {
