@@ -12,11 +12,9 @@ import {
   UserCheck,
   BookOpen,
   Scale,
-  Search,
   Home,
   ChevronRight,
-  Menu,
-  Sparkles
+  ShieldCheck
 } from 'lucide-react';
 import { UserManualModal } from '@/components/UserManualModal';
 
@@ -43,22 +41,20 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <header className="bg-white border-b border-slate-200 shadow-sm sticky top-0 z-40">
-      {/* 1. Topmost Utility Bar (대한민국 법원 전자소송포털 상단 유틸리티 바) */}
+      {/* 1. Topmost Utility Bar */}
       <div className="bg-[#F8F9FA] border-b border-slate-200 text-slate-600 text-[11px] py-1 px-4">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="flex items-center space-x-2">
-            <span className="bg-slate-200 text-slate-700 px-1.5 py-0.5 rounded text-[10px] font-bold">환영합니다</span>
-            <span>회생·파산관재인 및 채권자 전용 전자소송포털</span>
+            <span className="bg-[#1C2A45] text-amber-300 px-1.5 py-0.5 rounded text-[10px] font-extrabold">Re-Hub</span>
+            <span>회생·파산관재인 채권 시부인 관리 스마트 SaaS</span>
           </div>
 
           <div className="flex items-center space-x-3 text-slate-500 font-medium">
             <button onClick={() => setShowManualModal(true)} className="hover:text-blue-900 transition-colors">
-              사이트맵
+              이용 안내
             </button>
             <span>|</span>
-            <span className="text-slate-700 font-bold">관재인 로그인중 (김법률)</span>
-            <span>|</span>
-            <button className="hover:text-blue-900">English</button>
+            <span className="text-slate-700 font-bold">관재인 접속중 (김관재 변호사)</span>
             <span>|</span>
             <div className="flex items-center space-x-1">
               <span>화면크기</span>
@@ -69,21 +65,21 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
       </div>
 
-      {/* 2. Official Court Logo & Main Header Bar */}
+      {/* 2. Main Branding Bar (Re-Hub Original Logo) */}
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
         {/* Brand & Logo */}
         <div className="flex items-center space-x-3 cursor-pointer" onClick={() => setActiveTab('dashboard')}>
-          {/* Official Court Scale Logo Emblem */}
-          <div className="w-9 h-9 bg-[#1C2A45] rounded-full flex items-center justify-center text-amber-300 shadow-md">
-            <Scale className="w-5 h-5" />
+          <div className="w-10 h-10 bg-[#1C2A45] rounded-xl flex items-center justify-center text-amber-300 shadow-md">
+            <ShieldCheck className="w-6 h-6 text-emerald-400" />
           </div>
           <div>
-            <div className="flex items-center space-x-1.5">
-              <span className="font-extrabold text-slate-900 text-lg tracking-tight">대한민국 법원</span>
-              <span className="font-bold text-[#004E98] text-lg">전자소송포털</span>
-              <span className="bg-[#1C2A45] text-amber-300 text-[10px] font-extrabold px-1.5 py-0.5 rounded ml-1">Re-Hub</span>
+            <div className="flex items-center space-x-2">
+              <span className="font-black text-[#1C2A45] text-xl tracking-tight">Re-Hub</span>
+              <span className="text-xs bg-blue-100 text-blue-900 font-bold px-2 py-0.5 rounded border border-blue-200">
+                Insolvency Administration SaaS
+              </span>
             </div>
-            <p className="text-[10px] text-slate-500 font-medium">회생·파산관재인 채권 시부인 및 전자신고 시스템</p>
+            <p className="text-[11px] text-slate-500 font-medium">도산·회생관재인 채권 시부인 교차검증 및 법원 명세서 자동 생성 플랫폼</p>
           </div>
         </div>
 
@@ -126,7 +122,7 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
       </div>
 
-      {/* 3. Main Navigation Menu Tabs (전자소송포털 네비게이션 스타일) */}
+      {/* 3. Main Navigation Menu Tabs */}
       <div className="bg-[#1C2A45] text-white">
         <div className="max-w-7xl mx-auto px-4 flex items-center justify-between overflow-x-auto">
           <div className="flex space-x-1 font-bold text-sm">
@@ -139,7 +135,7 @@ export const Header: React.FC<HeaderProps> = ({
               }`}
             >
               <GitCompare className="w-4 h-4 text-amber-300" />
-              <span>나의전자소송 (3-Way 대시보드)</span>
+              <span>3-Way 시부인 대시보드</span>
             </button>
 
             <button
@@ -151,7 +147,7 @@ export const Header: React.FC<HeaderProps> = ({
               }`}
             >
               <FileText className="w-4 h-4 text-blue-300" />
-              <span>서류제출 (신고서 AI 파싱)</span>
+              <span>신고서 AI 파싱 (OCR)</span>
             </button>
 
             <button
@@ -175,7 +171,7 @@ export const Header: React.FC<HeaderProps> = ({
               }`}
             >
               <FileSpreadsheet className="w-4 h-4 text-amber-300" />
-              <span>각종신청 (법원 명세서 Excel)</span>
+              <span>법원 제출 명세서 Excel</span>
             </button>
 
             <button
@@ -183,19 +179,19 @@ export const Header: React.FC<HeaderProps> = ({
               className="px-5 py-3 transition-colors flex items-center space-x-2 hover:bg-blue-900/60 text-slate-200 border-b-4 border-transparent"
             >
               <BookOpen className="w-4 h-4 text-slate-300" />
-              <span>고객센터 (이용안내)</span>
+              <span>이용 매뉴얼</span>
             </button>
           </div>
         </div>
       </div>
 
-      {/* 4. Sub Breadcrumb Navigation Bar (전자소송포털 위치 경로 바) */}
+      {/* 4. Sub Breadcrumb Bar */}
       <div className="bg-[#F1F3F6] border-b border-slate-300 py-1.5 px-4 text-xs text-slate-600">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center space-x-1.5">
             <Home className="w-3.5 h-3.5 text-slate-500" />
             <ChevronRight className="w-3 h-3 text-slate-400" />
-            <span>회생·파산 사건</span>
+            <span>회생 사건</span>
             <ChevronRight className="w-3 h-3 text-slate-400" />
             <span className="font-bold text-[#1C2A45]">사건번호: 2025회단142 (주)알파테크놀로지 회생절차</span>
             <span className="bg-[#1C2A45] text-white text-[10px] px-1.5 py-0.2 rounded font-bold ml-1">
@@ -204,7 +200,7 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
 
           <div className="text-[11px] text-slate-500 font-mono hidden md:block">
-            관재인 심사 전용 모드
+            Re-Hub Insolvency Administration Platform
           </div>
         </div>
       </div>
