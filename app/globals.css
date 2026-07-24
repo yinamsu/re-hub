@@ -6,32 +6,38 @@
 
 :root {
   --font-pretendard: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+  --court-navy: #1C2A45;
+  --court-blue: #004E98;
+  --court-tab-bg: #F1F3F6;
+  --court-tab-border: #D5DBE2;
+  --court-footer-top: #363D48;
+  --court-footer-bottom: #2B303A;
 }
 
 body {
   font-family: var(--font-pretendard);
-  background-color: #f1f5f9;
-  color: #0f172a;
+  background-color: #F8F9FA;
+  color: #1E293B;
   -webkit-font-smoothing: antialiased;
 }
 
-/* Custom Scrollbar for Legal Court Dashboard */
+/* Official Court Portal Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: #F1F3F6;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #CBD5E1;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: #94A3B8;
 }
 
 /* Remove Number Spinner */
