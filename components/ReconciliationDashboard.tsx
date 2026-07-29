@@ -37,6 +37,19 @@ export const ReconciliationDashboard: React.FC<ReconciliationDashboardProps> = (
   const [showVerificationModal, setShowVerificationModal] = useState(false);
   const [saveToast, setSaveToast] = useState(false);
 
+  // Helper functions for Thousand Separators (천단위 , 콤마 포맷터)
+  const formatNumberWithCommas = (val: number | string | undefined | null) => {
+    if (val === undefined || val === null || val === '') return '0';
+    const numStr = String(val).replace(/[^0-9]/g, '');
+    if (!numStr) return '0';
+    return Number(numStr).toLocaleString('ko-KR');
+  };
+
+  const parseFormattedNumber = (val: string) => {
+    const cleanStr = val.replace(/[^0-9]/g, '');
+    return cleanStr ? Number(cleanStr) : 0;
+  };
+
   // Filtered list based on search & tab
   const filteredRecords = records.filter((r) => {
     const matchesSearch =
@@ -512,7 +525,7 @@ export const ReconciliationDashboard: React.FC<ReconciliationDashboardProps> = (
               </button>
             </div>
 
-            {/* Admitted & Denied Inputs */}
+            {/* Formatted Number Inputs with Thousand Separators (,) */}
             <div className="space-y-3">
               <div className="bg-slate-50 p-3 rounded-xl border border-slate-300 space-y-1">
                 <label className="text-[11px] font-bold text-slate-900 flex justify-between">
@@ -520,10 +533,11 @@ export const ReconciliationDashboard: React.FC<ReconciliationDashboardProps> = (
                   <span className="text-emerald-700 font-mono font-extrabold">시인액: {decision.admittedTotal.toLocaleString()}원</span>
                 </label>
                 <input
-                  type="number"
-                  value={decision.admittedPrincipal || 0}
+                  type="text"
+                  inputMode="numeric"
+                  value={formatNumberWithCommas(decision.admittedPrincipal)}
                   onChange={(e) =>
-                    updateDecision({ admittedPrincipal: Number(e.target.value) })
+                    updateDecision({ admittedPrincipal: parseFormattedNumber(e.target.value) })
                   }
                   className="w-full bg-white border border-slate-300 rounded-lg px-3 py-1.5 text-sm font-extrabold text-blue-900 font-mono focus:outline-none focus:border-blue-700"
                 />
@@ -533,10 +547,11 @@ export const ReconciliationDashboard: React.FC<ReconciliationDashboardProps> = (
                 <div className="bg-slate-50 p-2.5 rounded-xl border border-slate-300 space-y-1">
                   <label className="text-[10px] font-bold text-slate-700">시인 이자</label>
                   <input
-                    type="number"
-                    value={decision.admittedInterest || 0}
+                    type="text"
+                    inputMode="numeric"
+                    value={formatNumberWithCommas(decision.admittedInterest)}
                     onChange={(e) =>
-                      updateDecision({ admittedInterest: Number(e.target.value) })
+                      updateDecision({ admittedInterest: parseFormattedNumber(e.target.value) })
                     }
                     className="w-full bg-white border border-slate-300 rounded-lg px-2.5 py-1 text-xs font-bold text-emerald-800 font-mono focus:outline-none focus:border-blue-700"
                   />
@@ -545,24 +560,26 @@ export const ReconciliationDashboard: React.FC<ReconciliationDashboardProps> = (
                 <div className="bg-slate-50 p-2.5 rounded-xl border border-slate-300 space-y-1">
                   <label className="text-[10px] font-bold text-rose-700">자동 부인액</label>
                   <input
-                    type="number"
-                    value={decision.deniedAmount || 0}
+                    type="text"
+                    inputMode="numeric"
+                    value={formatNumberWithCommas(decision.deniedAmount)}
                     onChange={(e) =>
-                      updateDecision({ deniedAmount: Number(e.target.value) })
+                      updateDecision({ deniedAmount: parseFormattedNumber(e.target.value) })
                     }
                     className="w-full bg-white border border-slate-300 rounded-lg px-2.5 py-1 text-xs font-bold text-rose-700 font-mono focus:outline-none focus:border-rose-600"
                   />
                 </div>
               </div>
 
-              {/* Voting Right Admitted */}
+              {/* Voting Right Admitted Formatted Input */}
               <div className="bg-blue-50 p-3 rounded-xl border border-blue-300 space-y-1">
                 <label className="text-[11px] font-extrabold text-blue-900">의결권 인정액 (Voting Right)</label>
                 <input
-                  type="number"
-                  value={decision.votingRightAdmitted || 0}
+                  type="text"
+                  inputMode="numeric"
+                  value={formatNumberWithCommas(decision.votingRightAdmitted)}
                   onChange={(e) =>
-                    updateDecision({ votingRightAdmitted: Number(e.target.value) })
+                    updateDecision({ votingRightAdmitted: parseFormattedNumber(e.target.value) })
                   }
                   className="w-full bg-white border border-blue-400 rounded-lg px-3 py-1.5 text-sm font-extrabold text-blue-900 font-mono focus:outline-none focus:border-blue-700"
                 />
