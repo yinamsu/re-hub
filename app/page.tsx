@@ -29,7 +29,7 @@ import {
   ENTITY_NODES, 
   TRANSACTION_LINKS 
 } from '@/lib/forensicData';
-import { Scale, BookOpen, MessageCircle, ArrowUp } from 'lucide-react';
+import { ShieldCheck, BookOpen, ArrowUp } from 'lucide-react';
 
 export default function Home() {
   const [currentCase, setCurrentCase] = useState<CaseInfo>(AVAILABLE_CASES[0]);
@@ -79,7 +79,7 @@ export default function Home() {
   if (!isLoaded) {
     return (
       <div className="min-h-screen bg-[#F8F9FA] flex items-center justify-center text-[#0A60C2] font-mono text-sm font-bold">
-        대한민국 법원 전자소송 연동 Re-Hub 관재인 포털 로딩 중...
+        Re-Hub Insolvency Administration SaaS Loading...
       </div>
     );
   }
@@ -88,7 +88,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#F8F9FA] text-[#222222] flex flex-col font-sans selection:bg-[#0A60C2] selection:text-white relative">
-      {/* 1. Top Header (1:1 Supreme Court Portal Bar) */}
+      {/* 1. Top Header (Clean Court-inspired Bar) */}
       <Header
         currentCase={currentCase}
         onSelectCase={handleSelectCase}
@@ -101,7 +101,7 @@ export default function Home() {
 
       {/* 2. Main 3-to-4 Pane Workspace Body */}
       <div className="flex-1 flex overflow-hidden">
-        {/* Left Pane: Official Court Sidebar */}
+        {/* Left Pane: Re-Hub Sidebar */}
         <Sidebar
           activeTab={activeTab}
           setActiveTab={setActiveTab}
@@ -166,7 +166,7 @@ export default function Home() {
         />
       </div>
 
-      {/* 3. Official Supreme Court Electronic Portal 2-Tier Footer (1:1 Court Portal Footer) */}
+      {/* 3. Re-Hub SaaS Clean 2-Tier Footer */}
       <footer className="mt-auto border-t border-slate-300 z-10 text-xs">
         {/* Top Tier (#363D48) */}
         <div className="bg-[#363D48] text-slate-200 py-2.5 px-4 border-b border-[#2B303A]">
@@ -176,68 +176,55 @@ export default function Home() {
               <span>|</span>
               <button onClick={() => setShowFooterManual(true)} className="hover:underline font-bold text-amber-300">개인정보처리방침</button>
               <span>|</span>
-              <button onClick={() => setShowFooterManual(true)} className="hover:underline">저작권보호정책</button>
+              <button onClick={() => setShowFooterManual(true)} className="hover:underline flex items-center gap-1 text-blue-200">
+                <BookOpen className="w-3 h-3" />
+                <span>관재인·채권자 상세 이용 매뉴얼</span>
+              </button>
               <span>|</span>
-              <button onClick={() => setShowFooterManual(true)} className="hover:underline">링크생성안내</button>
-              <span>|</span>
-              <button onClick={() => setShowFooterManual(true)} className="hover:underline">문제해결 안내</button>
-              <span>|</span>
-              <button onClick={() => setShowFooterManual(true)} className="hover:underline">고객의 소리</button>
-              <span>|</span>
-              <button onClick={() => setShowFooterManual(true)} className="hover:underline">원격지원 서비스</button>
+              <button onClick={() => setShowFooterManual(true)} className="hover:underline">시스템 장애 안내</button>
             </div>
 
             <div className="flex items-center space-x-2 text-[11px]">
-              <select className="bg-[#2B303A] text-slate-300 border border-slate-600 rounded px-2 py-0.5">
-                <option>관련사이트</option>
-                <option>대한민국 대법원</option>
-                <option>서울회생법원</option>
-                <option>인터넷등기소</option>
-              </select>
-              <button className="bg-slate-600 hover:bg-slate-500 text-white px-2.5 py-0.5 rounded text-[11px] font-bold">
-                바로가기
-              </button>
+              <span className="text-slate-400 font-mono">서울회생법원 실무 준칙 별표 2-2 표준 서식 지원</span>
             </div>
           </div>
         </div>
 
         {/* Bottom Tier (#2B303A) */}
-        <div className="bg-[#2B303A] text-slate-300 py-6 px-4">
+        <div className="bg-[#2B303A] text-slate-300 py-5 px-4">
           <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-            {/* Left Supreme Court Emblem */}
-            <div className="flex items-center space-x-4">
-              <div className="w-10 h-10 border border-slate-600 rounded-full flex items-center justify-center text-white bg-slate-800">
-                <Scale className="w-6 h-6 text-slate-200" />
+            <div className="flex items-center space-x-3">
+              <div className="w-9 h-9 border border-slate-600 rounded-lg flex items-center justify-center text-amber-300 bg-[#1C2A45]">
+                <ShieldCheck className="w-5 h-5 text-emerald-400" />
               </div>
-              <div className="space-y-1 text-xs">
-                <div className="text-white font-bold flex items-center gap-2">
-                  <span>이용 및 장애 문의 : 02) 3480-1715</span>
-                  <span className="text-slate-400 text-[11px]">(평일 9시~18시)</span>
+              <div className="space-y-0.5">
+                <div className="text-white text-xs font-extrabold flex items-center gap-2 font-mono">
+                  <span>Re-Hub Insolvency Administration Platform</span>
+                  <span className="text-amber-300 text-[10px] bg-slate-800 px-1.5 py-0.2 rounded border border-slate-700">
+                    Court Compliance Ready
+                  </span>
                 </div>
                 <div className="text-[10px] text-slate-400 font-mono">
-                  COPYRIGHT © 2025 RE-HUB / SUPREME COURT OF KOREA. ALL RIGHTS RESERVED.
+                  COPYRIGHT © 2025 RE-HUB PLATFORM. ALL RIGHTS RESERVED.
                 </div>
               </div>
             </div>
 
-            {/* Right Web Accessibility Badge & Floating Buttons */}
-            <div className="flex items-center space-x-4">
-              <div className="bg-slate-800 border border-slate-700 px-3 py-1 rounded text-center text-[10px] font-mono text-slate-300">
-                WA Web Accessibility Certified
+            <div className="flex items-center space-x-3 text-xs text-slate-400">
+              <div className="border border-slate-700 bg-slate-800 px-3 py-1 rounded text-center">
+                <div className="text-[10px] font-bold text-slate-300">서울회생법원 표준 양식 연동</div>
+                <div className="text-[9px] text-slate-400 font-mono">STRICT COURT COMPLIANCE</div>
               </div>
             </div>
           </div>
         </div>
       </footer>
 
-      {/* Floating Chat Icon & TOP Button (1:1 Court Screenshot) */}
+      {/* Floating TOP Button */}
       <div className="fixed bottom-6 right-6 flex flex-col space-y-2 z-40">
-        <button className="w-11 h-11 bg-[#0A60C2] hover:bg-[#084FA3] text-white rounded-full flex items-center justify-center shadow-xl transition-all">
-          <MessageCircle className="w-5 h-5" />
-        </button>
         <button 
           onClick={scrollToTop}
-          className="bg-white border border-slate-300 text-slate-800 text-[10px] font-bold px-2 py-1 rounded-full shadow-md hover:bg-slate-100 flex items-center justify-center space-x-0.5"
+          className="bg-white border border-slate-300 text-slate-800 text-[10px] font-bold px-2.5 py-1.5 rounded-full shadow-md hover:bg-slate-100 flex items-center justify-center space-x-0.5"
         >
           <span>TOP</span>
           <ArrowUp className="w-3 h-3" />
