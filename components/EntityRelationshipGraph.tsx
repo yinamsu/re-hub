@@ -55,11 +55,11 @@ export const EntityRelationshipGraph: React.FC<EntityRelationshipGraphProps> = (
         <div>
           <div className="flex items-center space-x-2 text-[#C53030] font-bold text-xs mb-1">
             <Network className="w-4 h-4" />
-            <span>Module 4. Entity Relationship & Transaction Flow Network Graph</span>
+            <span>관계자 및 자금 흐름 분석 그래프</span>
           </div>
           <h1 className="text-2xl font-black text-slate-900">특수관계자 및 자금 유출 네트워크 그래프</h1>
           <p className="text-slate-600 text-xs mt-1">
-            채무자 회생기업, 대표이사, 특수관계인, 주요 채권자 간의 차명 지분 관계 및 의심스러운 자금 유출 흐름(8.5억원)을 시각적으로 추적합니다.
+            채무자 회생기업, 대표이사, 특수관계인, 주요 채권자 간의 차명 지분 관계 및 의심스러운 자금 유출 흐름을 시각적으로 추적합니다.
           </p>
         </div>
 
@@ -78,7 +78,7 @@ export const EntityRelationshipGraph: React.FC<EntityRelationshipGraphProps> = (
         <div className="lg:col-span-8 bg-[#0A192F] border border-[#1B2E4B] rounded p-6 shadow-xl relative min-h-[480px] flex flex-col justify-between select-none">
           <div className="flex items-center justify-between text-xs text-slate-300 font-mono border-b border-[#1B2E4B] pb-3">
             <span className="flex items-center gap-1.5 text-amber-300 font-bold">
-              <Network className="w-4 h-4 text-emerald-400" /> Interactive Node-Link Forensic Diagram
+              <Network className="w-4 h-4 text-emerald-400" /> 관계자 및 자금 흐름 네트워크 분석도
             </span>
             <span className="text-[10px] text-slate-400">노드 및 연결선을 클릭하여 포렌식 정보를 확인하세요</span>
           </div>
@@ -161,7 +161,7 @@ export const EntityRelationshipGraph: React.FC<EntityRelationshipGraphProps> = (
         <div className="lg:col-span-4 bg-white border border-[#CBD5E1] rounded p-5 shadow-sm space-y-4">
           <div className="flex items-center space-x-2 text-[#1B2E4B] pb-3 border-b border-slate-200 font-bold text-sm">
             <Info className="w-4 h-4 text-[#004E98]" />
-            <span>선택 노드 및 자금 유출 포렌식 검계</span>
+            <span>선택 노드 및 자금 흐름 분석</span>
           </div>
 
           {selectedNode ? (

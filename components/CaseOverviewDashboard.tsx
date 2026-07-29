@@ -47,7 +47,7 @@ export const CaseOverviewDashboard: React.FC<CaseOverviewDashboardProps> = ({
       <div className="flex justify-between items-center pb-2 border-b-2 border-[#1C2A45]">
         <div className="flex items-center space-x-2">
           <span className="w-2.5 h-2.5 rounded-full border-2 border-[#0A60C2] bg-white inline-block"></span>
-          <h1 className="text-xl font-black text-[#1C2A45]">진행중사건 (회생채권 시부인 심사 대시보드)</h1>
+          <h1 className="text-xl font-black text-[#1C2A45]">진행중 사건 (회생채권 시부인 심사 대시보드)</h1>
         </div>
 
         <div className="flex items-center space-x-2 text-xs">
@@ -137,7 +137,7 @@ export const CaseOverviewDashboard: React.FC<CaseOverviewDashboardProps> = ({
               <th className="py-2.5 px-3">사건번호</th>
               <th className="py-2.5 px-3">재판부</th>
               <th className="py-2.5 px-3">신고번호</th>
-              <th className="py-2.5 px-3">채권자명 (원고)</th>
+              <th className="py-2.5 px-3">채권자명</th>
               <th className="py-2.5 px-3 text-right">신고 채권총액</th>
               <th className="py-2.5 px-3 text-right">관재인 시인액</th>
               <th className="py-2.5 px-3 text-center">시부인 상태</th>
@@ -171,7 +171,7 @@ export const CaseOverviewDashboard: React.FC<CaseOverviewDashboardProps> = ({
                       onClick={() => onNavigateToTab('dashboard')}
                       className="bg-white border border-[#CCCCCC] hover:border-[#0A60C2] text-slate-800 px-2.5 py-1 rounded text-[11px] font-bold shadow-sm"
                     >
-                      메뉴선택
+                      시부인 심사
                     </button>
                   </td>
                 </tr>
@@ -208,13 +208,13 @@ export const CaseOverviewDashboard: React.FC<CaseOverviewDashboardProps> = ({
 
         <ul className="space-y-1.5 pl-4 list-disc text-slate-700 leading-relaxed text-[11px]">
           <li>
-            전자소송인증 없이 전자소송사건등록을 한 대리인이나 참가신청을 한 참가인은 시부인명세서 확인 전에 사건기록열람 신청을 완료해주시기 바랍니다.
+            채권자가 셀프 전자신고 포털을 통해 접수한 채권 내역은 '3-Way 채권 시부인' 모듈로 즉시 연동됩니다.
           </li>
           <li>
-            본소에 병합된 사건의 경우 소송서류제출, 소송비용납부, 알림시스템설정을 할 수 없으며, 본소 사건번호로 진행하시기 바랍니다.
+            장부상 금액과 신고 금액의 차액 발생 시 3-Way 대조 화면에서 원증빙 및 소명 사유를 확인 후 시부인 판정을 진행하시기 바랍니다.
           </li>
           <li>
-            재판적조회(김장인, 조장위원 등), 전자채권인, 법무법인 소속변호사는 시부인 심사 완료 후 시부인 명세서 Excel (별표 2-2) 서식을 최종 다운로드하여 법원 제출용으로 활용하실 수 있습니다.
+            시부인 심사 완료 후 '법원 제출 명세서' 모듈에서 서울회생법원 실무 준칙 별표 2-2 서식 규격 엑셀을 다운로드하실 수 있습니다.
           </li>
         </ul>
       </div>

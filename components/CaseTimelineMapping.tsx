@@ -43,11 +43,11 @@ export const CaseTimelineMapping: React.FC<CaseTimelineMappingProps> = ({
   return (
     <div className="space-y-6 pb-12">
       {/* 1. Header Banner */}
-      <div className="bg-white border border-[#CBD5E1] rounded p-6 shadow-sm border-t-4 border-t-[#1B2E4B] flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <div className="bg-white border border-[#D5DBE2] rounded p-6 shadow-sm border-t-4 border-t-[#0A60C2] flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center space-x-2 text-[#1B2E4B] font-bold text-xs mb-1">
-            <History className="w-4 h-4 text-[#004E98]" />
-            <span>Module 3. Chronological Incident Timeline & Fact Mapping</span>
+            <History className="w-4 h-4 text-[#0A60C2]" />
+            <span>사건 경과 타임라인 및 쟁점 대조</span>
           </div>
           <h1 className="text-2xl font-black text-slate-900">사건 타임라인 및 쟁점 대조 매핑</h1>
           <p className="text-slate-600 text-xs mt-1">
@@ -55,17 +55,17 @@ export const CaseTimelineMapping: React.FC<CaseTimelineMappingProps> = ({
           </p>
         </div>
 
-        <div className="bg-[#F8FAFC] border border-[#CBD5E1] p-3 rounded flex items-center space-x-3 text-xs font-mono">
+        <div className="bg-[#F8F9FA] border border-[#D5DBE2] p-3 rounded flex items-center space-x-3 text-xs font-mono">
           <ArrowRightLeft className="w-6 h-6 text-[#1B2E4B]" />
           <div>
-            <div className="text-slate-500 font-sans">Dual-Grid Fact Matrix</div>
+            <div className="text-slate-500 font-sans">쟁점 대조표</div>
             <div className="font-bold text-slate-900">주장 {claimEvents.length}건 vs 항변 {rebuttalEvents.length}건</div>
           </div>
         </div>
       </div>
 
       {/* 2. Controls & Search */}
-      <div className="bg-white border border-[#CBD5E1] rounded p-4 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
+      <div className="bg-white border border-[#D5DBE2] rounded p-4 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
         <div className="relative w-full md:w-80">
           <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
           <input
@@ -73,7 +73,7 @@ export const CaseTimelineMapping: React.FC<CaseTimelineMappingProps> = ({
             placeholder="타임라인 사건명, 당사자, 내용 검색..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-[#F8FAFC] border border-[#CBD5E1] text-xs text-slate-900 pl-9 pr-3 py-2 rounded focus:outline-none focus:border-[#1B2E4B]"
+            className="w-full bg-[#F8F9FA] border border-[#D5DBE2] text-xs text-slate-900 pl-9 pr-3 py-2 rounded focus:outline-none focus:border-[#1B2E4B]"
           />
         </div>
 
@@ -89,7 +89,7 @@ export const CaseTimelineMapping: React.FC<CaseTimelineMappingProps> = ({
           <button
             onClick={() => setActiveFilter('PLAINTIFF_CLAIM')}
             className={`px-3 py-1.5 rounded transition-colors ${
-              activeFilter === 'PLAINTIFF_CLAIM' ? 'bg-[#004E98] text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+              activeFilter === 'PLAINTIFF_CLAIM' ? 'bg-[#0A60C2] text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
             }`}
           >
             채권자 주장 사건
@@ -108,8 +108,8 @@ export const CaseTimelineMapping: React.FC<CaseTimelineMappingProps> = ({
       {/* 3. Dual-Grid Fact Comparison View */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Left Column: Plaintiff Claim (채권자 주장) */}
-        <div className="bg-white border border-[#CBD5E1] rounded p-5 shadow-sm space-y-4">
-          <div className="flex items-center space-x-2 text-[#004E98] pb-3 border-b border-slate-200">
+        <div className="bg-white border border-[#D5DBE2] rounded p-5 shadow-sm space-y-4">
+          <div className="flex items-center space-x-2 text-[#0A60C2] pb-3 border-b border-slate-200">
             <Scale className="w-5 h-5" />
             <h3 className="font-extrabold text-sm text-slate-900 uppercase tracking-wide">
               [주장] 채권자 원인관계 및 대여 사실
@@ -118,7 +118,7 @@ export const CaseTimelineMapping: React.FC<CaseTimelineMappingProps> = ({
 
           <div className="space-y-3">
             {claimEvents.map((ev) => (
-              <div key={ev.id} className="bg-[#F8FAFC] border border-[#CBD5E1] p-4 rounded text-xs space-y-2 relative border-l-4 border-l-[#004E98]">
+              <div key={ev.id} className="bg-[#F8F9FA] border border-[#D5DBE2] p-4 rounded text-xs space-y-2 relative border-l-4 border-l-[#0A60C2]">
                 <div className="flex items-center justify-between text-slate-500 font-mono text-[11px]">
                   <span>🗓️ {ev.date} {ev.time}</span>
                   {ev.linkedEvidenceLabel && (
@@ -132,7 +132,7 @@ export const CaseTimelineMapping: React.FC<CaseTimelineMappingProps> = ({
                 <p className="text-slate-600 text-xs leading-relaxed">{ev.description}</p>
 
                 {ev.amount && (
-                  <div className="text-xs font-mono font-extrabold text-[#004E98] pt-1 border-t border-slate-200 flex justify-between">
+                  <div className="text-xs font-mono font-extrabold text-[#0A60C2] pt-1 border-t border-slate-200 flex justify-between">
                     <span>관련 금액:</span>
                     <span>{ev.amount.toLocaleString()} 원</span>
                   </div>
@@ -143,7 +143,7 @@ export const CaseTimelineMapping: React.FC<CaseTimelineMappingProps> = ({
         </div>
 
         {/* Right Column: Defendant Rebuttal (관재인/채무자 항변) */}
-        <div className="bg-white border border-[#CBD5E1] rounded p-5 shadow-sm space-y-4">
+        <div className="bg-white border border-[#D5DBE2] rounded p-5 shadow-sm space-y-4">
           <div className="flex items-center space-x-2 text-[#C53030] pb-3 border-b border-slate-200">
             <AlertTriangle className="w-5 h-5 text-[#C53030]" />
             <h3 className="font-extrabold text-sm text-slate-900 uppercase tracking-wide">

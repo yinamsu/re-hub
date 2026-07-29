@@ -51,19 +51,19 @@ export const ForensicEvidenceVault: React.FC<ForensicEvidenceVaultProps> = ({
   return (
     <div className="space-y-6 pb-12">
       {/* 1. Header Banner */}
-      <div className="bg-white border border-[#CBD5E1] rounded p-6 shadow-sm border-t-4 border-t-[#004E98] flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <div className="bg-white border border-[#D5DBE2] rounded p-6 shadow-sm border-t-4 border-t-[#0A60C2] flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center space-x-2 text-[#1B2E4B] font-bold text-xs mb-1">
-            <FolderLock className="w-4 h-4 text-[#004E98]" />
-            <span>Module 2. Chain of Custody Forensic Evidence Vault</span>
+            <FolderLock className="w-4 h-4 text-[#0A60C2]" />
+            <span>디지털 증거 보관 및 무결성 검증</span>
           </div>
           <h1 className="text-2xl font-black text-slate-900">디지털 증거보관소 및 무결성 검증 시스템</h1>
           <p className="text-slate-600 text-xs mt-1">
-            법원 제출용 서류(`갑/을 호증`)의 SHA-256 해시값 산출, 입수 이력, 증거 보관 사슬(Chain of Custody)을 관리합니다.
+            법원 제출용 서류(갑/을 호증)의 SHA-256 해시값 산출, 입수 이력, 증거 보관 사슬(Chain of Custody)을 관리합니다.
           </p>
         </div>
 
-        <div className="bg-[#F8FAFC] border border-[#CBD5E1] p-3 rounded flex items-center space-x-3 text-xs font-mono">
+        <div className="bg-[#F8F9FA] border border-[#D5DBE2] p-3 rounded flex items-center space-x-3 text-xs font-mono">
           <ShieldCheck className="w-6 h-6 text-[#2F855A]" />
           <div>
             <div className="text-slate-500">등록 증거 서류</div>
@@ -73,7 +73,7 @@ export const ForensicEvidenceVault: React.FC<ForensicEvidenceVaultProps> = ({
       </div>
 
       {/* 2. Controls: Search & Category Filter */}
-      <div className="bg-white border border-[#CBD5E1] rounded p-4 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
+      <div className="bg-white border border-[#D5DBE2] rounded p-4 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
         {/* Search */}
         <div className="relative w-full md:w-80">
           <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
@@ -82,7 +82,7 @@ export const ForensicEvidenceVault: React.FC<ForensicEvidenceVaultProps> = ({
             placeholder="호증 번호, 서류명, SHA-256 해시 검색..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-[#F8FAFC] border border-[#CBD5E1] text-xs text-slate-900 pl-9 pr-3 py-2 rounded focus:outline-none focus:border-[#1B2E4B]"
+            className="w-full bg-[#F8F9FA] border border-[#D5DBE2] text-xs text-slate-900 pl-9 pr-3 py-2 rounded focus:outline-none focus:border-[#1B2E4B]"
           />
         </div>
 
@@ -132,14 +132,14 @@ export const ForensicEvidenceVault: React.FC<ForensicEvidenceVaultProps> = ({
       </div>
 
       {/* 3. Evidence Table */}
-      <div className="bg-white border border-[#CBD5E1] rounded overflow-hidden shadow-sm">
+      <div className="bg-white border border-[#D5DBE2] rounded overflow-hidden shadow-sm">
         <table className="w-full text-left text-xs">
           <thead className="bg-[#1B2E4B] text-white font-bold uppercase">
             <tr>
               <th className="py-3 px-4 w-28">법원 라벨</th>
               <th className="py-3 px-4">증거 명칭 & 파일명</th>
               <th className="py-3 px-4 w-28">파일 용량</th>
-              <th className="py-3 px-4">SHA-256 검증 해시 (Cryptographic Hash)</th>
+              <th className="py-3 px-4">SHA-256 검증 해시</th>
               <th className="py-3 px-4 w-36">입수 일시</th>
               <th className="py-3 px-4 w-24 text-center">무결성 상태</th>
               <th className="py-3 px-4 w-20 text-center">상세</th>
@@ -167,7 +167,7 @@ export const ForensicEvidenceVault: React.FC<ForensicEvidenceVaultProps> = ({
                 <td className="py-3.5 px-4 text-center">
                   {item.verificationStatus === 'VERIFIED' && (
                     <span className="bg-[#ECFDF5] text-[#2F855A] border border-emerald-300 text-[10px] font-bold px-2 py-0.5 rounded inline-flex items-center gap-1">
-                      <CheckCircle2 className="w-3 h-3" /> VERIFIED
+                      <CheckCircle2 className="w-3 h-3" /> 무결성 검증 완료
                     </span>
                   )}
                 </td>
@@ -189,7 +189,7 @@ export const ForensicEvidenceVault: React.FC<ForensicEvidenceVaultProps> = ({
       {/* 4. Chain of Custody Detail Modal */}
       {selectedItem && (
         <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white border border-[#CBD5E1] rounded max-w-2xl w-full shadow-2xl space-y-4 text-slate-900 p-6">
+          <div className="bg-white border border-[#D5DBE2] rounded max-w-2xl w-full shadow-2xl space-y-4 text-slate-900 p-6">
             <div className="flex items-center justify-between pb-3 border-b border-slate-200">
               <div className="flex items-center space-x-2 text-[#1B2E4B]">
                 <ShieldCheck className="w-6 h-6 text-[#2F855A]" />
@@ -201,7 +201,7 @@ export const ForensicEvidenceVault: React.FC<ForensicEvidenceVaultProps> = ({
             </div>
 
             <div className="space-y-4 text-xs">
-              <div className="bg-[#F8FAFC] p-4 rounded border border-slate-300 space-y-2">
+              <div className="bg-[#F8F9FA] p-4 rounded border border-slate-300 space-y-2">
                 <div className="flex justify-between items-center">
                   <span className="font-mono font-bold text-lg text-[#1B2E4B]">{selectedItem.courtLabel}</span>
                   <span className="bg-[#ECFDF5] text-[#2F855A] border border-emerald-300 text-xs font-bold px-2.5 py-0.5 rounded">
@@ -218,7 +218,7 @@ export const ForensicEvidenceVault: React.FC<ForensicEvidenceVaultProps> = ({
                   <span>암호화 검증 해시값 (SHA-256 Hash Algorithm)</span>
                   <button
                     onClick={() => handleCopyHash(selectedItem.sha256Hash)}
-                    className="text-[11px] text-[#004E98] hover:underline flex items-center gap-1 font-mono"
+                    className="text-[11px] text-[#0A60C2] hover:underline flex items-center gap-1 font-mono"
                   >
                     {copiedHash ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
                     <span>{copiedHash ? '복사완료' : '해시 복사'}</span>

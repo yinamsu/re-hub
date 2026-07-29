@@ -79,7 +79,7 @@ export default function Home() {
   if (!isLoaded) {
     return (
       <div className="min-h-screen bg-[#F8F9FA] flex items-center justify-center text-[#0A60C2] font-mono text-sm font-bold">
-        Re-Hub Insolvency Administration SaaS Loading...
+        Re-Hub 회생·파산 플랫폼 로딩 중...
       </div>
     );
   }
@@ -88,7 +88,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#F8F9FA] text-[#222222] flex flex-col font-sans selection:bg-[#0A60C2] selection:text-white relative">
-      {/* 1. Top Header (Clean Court-inspired Bar) */}
+      {/* 1. Top Header */}
       <Header
         currentCase={currentCase}
         onSelectCase={handleSelectCase}
@@ -166,7 +166,7 @@ export default function Home() {
         />
       </div>
 
-      {/* 3. Re-Hub SaaS Clean 2-Tier Footer */}
+      {/* 3. Re-Hub Clean 2-Tier Footer */}
       <footer className="mt-auto border-t border-slate-300 z-10 text-xs">
         {/* Top Tier (#363D48) */}
         <div className="bg-[#363D48] text-slate-200 py-2.5 px-4 border-b border-[#2B303A]">
@@ -180,12 +180,10 @@ export default function Home() {
                 <BookOpen className="w-3 h-3" />
                 <span>관재인·채권자 상세 이용 매뉴얼</span>
               </button>
-              <span>|</span>
-              <button onClick={() => setShowFooterManual(true)} className="hover:underline">시스템 장애 안내</button>
             </div>
 
             <div className="flex items-center space-x-2 text-[11px]">
-              <span className="text-slate-400 font-mono">서울회생법원 실무 준칙 별표 2-2 표준 서식 지원</span>
+              <span className="text-slate-400">서울회생법원 실무 준칙 별표 2-2 표준 서식 출력 지원</span>
             </div>
           </div>
         </div>
@@ -198,11 +196,8 @@ export default function Home() {
                 <ShieldCheck className="w-5 h-5 text-emerald-400" />
               </div>
               <div className="space-y-0.5">
-                <div className="text-white text-xs font-extrabold flex items-center gap-2 font-mono">
-                  <span>Re-Hub Insolvency Administration Platform</span>
-                  <span className="text-amber-300 text-[10px] bg-slate-800 px-1.5 py-0.2 rounded border border-slate-700">
-                    Court Compliance Ready
-                  </span>
+                <div className="text-white text-xs font-bold flex items-center gap-2">
+                  <span>Re-Hub 회생·파산 채권 관리 플랫폼</span>
                 </div>
                 <div className="text-[10px] text-slate-400 font-mono">
                   COPYRIGHT © 2025 RE-HUB PLATFORM. ALL RIGHTS RESERVED.
@@ -211,10 +206,7 @@ export default function Home() {
             </div>
 
             <div className="flex items-center space-x-3 text-xs text-slate-400">
-              <div className="border border-slate-700 bg-slate-800 px-3 py-1 rounded text-center">
-                <div className="text-[10px] font-bold text-slate-300">서울회생법원 표준 양식 연동</div>
-                <div className="text-[9px] text-slate-400 font-mono">STRICT COURT COMPLIANCE</div>
-              </div>
+              <span className="text-[11px] text-slate-400">서울회생법원 별표 2-2 규격 엑셀 다운로드 지원</span>
             </div>
           </div>
         </div>

@@ -104,7 +104,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     activeTab === 'evidence' ? 'font-bold text-[#0A60C2] bg-[#EDF5FC]' : 'text-[#555555]'
                   }`}
                 >
-                  <span>포렌식 증거보관소</span>
+                  <span>디지털 증거보관소</span>
                 </button>
 
                 <button
@@ -148,23 +148,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <span>채권자 셀프 전자신고</span>
           </button>
 
-          <div className="px-4 py-2.5 text-[#666666] border-b border-[#E8ECEF]">
-            사건기록 열람
-          </div>
-          <div className="px-4 py-2.5 text-[#666666] border-b border-[#E8ECEF]">
-            Re-Hub 서식등록
-          </div>
-          <div className="px-4 py-2.5 text-[#666666] border-b border-[#E8ECEF]">
-            맞춤형 문서함
-          </div>
         </div>
       </div>
 
       {/* Footer Info */}
       <div className="p-3 bg-[#F0F4F8] text-[10px] text-slate-500 border-t border-[#D5DBE2] font-mono leading-tight">
-        Re-Hub Insolvency SaaS v3.2
-        <br />
-        서울회생법원 실무 준칙 규격 연동
+        Re-Hub v3.2 | 회생채권 시부인 및 포렌식 시스템
       </div>
     </aside>
   );

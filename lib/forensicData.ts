@@ -87,7 +87,7 @@ export const FORENSIC_EVIDENCE_ITEMS: ForensicEvidence[] = [
     fileSize: '18.9 MB',
     sha256Hash: '5f6a7b8c9d0e1f234567890abcdef1234567890abcdef1234567890abcdef12',
     intakeTimestamp: '2025-01-22 16:30:00',
-    custodian: 'Kroll Forensic Audit Team',
+    custodian: 'Re-Hub 포렌식 분석팀',
     verificationStatus: 'VERIFIED',
     summary: '개시전 6개월 간 대표이사 친인척 관련 페이퍼컴퍼니로 유출된 8.5억원의 가지급금 계좌 추적 결과.',
   },
