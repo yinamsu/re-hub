@@ -48,6 +48,39 @@ export const ForensicEvidenceVault: React.FC<ForensicEvidenceVaultProps> = ({
     setTimeout(() => setCopiedHash(false), 1500);
   };
 
+  const handleDownloadEvidenceFile = (item: ForensicEvidence) => {
+    const content = `===========================================================
+[Re-Hub 디지털 증거보관소] 법원 제출용 무결성 증거 파일
+===========================================================
+- 법원 증거 라벨: ${item.courtLabel}
+- 서류 명칭: ${item.title}
+- 증거 파일명: ${item.fileName}
+- 파일 용량: ${item.fileSize}
+- 무결성 상태: ${item.verificationStatus === 'VERIFIED' ? '무결성 검증 완료 (SHA-256 Verified)' : '미검증'}
+- SHA-256 검증 해시: ${item.sha256Hash}
+- 최초 입수 시각: ${item.intakeTimestamp}
+- 증거 보관자: ${item.custodian}
+- 연동 채권 신고번호: ${item.linkedCreditorFilingNo || '해당 없음'}
+
+[증거 서류 요약 내용]
+${item.summary}
+
+===========================================================
+본 증거 서류는 Re-Hub 디지털 무결성 검증 규격을 준수하며,
+위변조 방지 SHA-256 암호화 해시가 기록된 법원 제출용 서류입니다.
+===========================================================`;
+
+    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = item.fileName.replace(/\.pdf$/, '_법원제출증거.txt');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="space-y-6 pb-12">
       {/* 1. Header Banner */}
@@ -136,49 +169,65 @@ export const ForensicEvidenceVault: React.FC<ForensicEvidenceVaultProps> = ({
         <table className="w-full text-left text-xs">
           <thead className="bg-[#1B2E4B] text-white font-bold uppercase">
             <tr>
-              <th className="py-3 px-4 w-28">법원 라벨</th>
+              <th className="py-3 px-4 w-32 whitespace-nowrap">법원 라벨</th>
               <th className="py-3 px-4">증거 명칭 & 파일명</th>
-              <th className="py-3 px-4 w-28">파일 용량</th>
+              <th className="py-3 px-4 w-28 whitespace-nowrap">파일 용량</th>
               <th className="py-3 px-4">SHA-256 검증 해시</th>
-              <th className="py-3 px-4 w-36">입수 일시</th>
-              <th className="py-3 px-4 w-24 text-center">무결성 상태</th>
-              <th className="py-3 px-4 w-20 text-center">상세</th>
+              <th className="py-3 px-4 w-36 whitespace-nowrap">입수 일시</th>
+              <th className="py-3 px-4 w-28 text-center whitespace-nowrap">무결성 상태</th>
+              <th className="py-3 px-4 w-24 text-center whitespace-nowrap">다운로드/상세</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-200">
             {filteredItems.map((item) => (
               <tr key={item.id} className="hover:bg-slate-50 transition-colors">
-                <td className="py-3.5 px-4 font-mono font-black text-[#1B2E4B]">
-                  <span className="bg-slate-100 border border-slate-300 px-2 py-0.5 rounded">
+                <td className="py-3.5 px-4 font-mono font-black text-[#1B2E4B] whitespace-nowrap">
+                  <span className="bg-slate-100 border border-slate-300 px-2.5 py-1 rounded text-xs font-bold whitespace-nowrap inline-block">
                     {item.courtLabel}
                   </span>
                 </td>
                 <td className="py-3.5 px-4">
                   <div className="font-bold text-slate-900">{item.title}</div>
-                  <div className="text-[11px] text-slate-500 font-mono mt-0.5">📄 {item.fileName}</div>
+                  <button 
+                    onClick={() => handleDownloadEvidenceFile(item)}
+                    className="text-[11px] text-[#0A60C2] hover:underline font-mono mt-1 flex items-center gap-1.5 font-bold cursor-pointer group text-left"
+                    title="클릭하여 증거 파일 다운로드"
+                  >
+                    <Download className="w-3.5 h-3.5 text-[#0A60C2] group-hover:scale-110 transition-transform" />
+                    <span className="underline">{item.fileName}</span>
+                  </button>
                 </td>
-                <td className="py-3.5 px-4 font-mono text-slate-600">{item.fileSize}</td>
+                <td className="py-3.5 px-4 font-mono text-slate-600 whitespace-nowrap">{item.fileSize}</td>
                 <td className="py-3.5 px-4 font-mono text-[11px] text-slate-600">
                   <div className="truncate max-w-xs bg-slate-50 p-1.5 rounded border border-slate-200 text-slate-800" title={item.sha256Hash}>
                     {item.sha256Hash.substring(0, 24)}...
                   </div>
                 </td>
-                <td className="py-3.5 px-4 font-mono text-slate-600">{item.intakeTimestamp}</td>
-                <td className="py-3.5 px-4 text-center">
+                <td className="py-3.5 px-4 font-mono text-slate-600 whitespace-nowrap">{item.intakeTimestamp}</td>
+                <td className="py-3.5 px-4 text-center whitespace-nowrap">
                   {item.verificationStatus === 'VERIFIED' && (
-                    <span className="bg-[#ECFDF5] text-[#2F855A] border border-emerald-300 text-[10px] font-bold px-2 py-0.5 rounded inline-flex items-center gap-1">
+                    <span className="bg-[#ECFDF5] text-[#2F855A] border border-emerald-300 text-[10px] font-bold px-2 py-0.5 rounded inline-flex items-center gap-1 whitespace-nowrap">
                       <CheckCircle2 className="w-3 h-3" /> 무결성 검증 완료
                     </span>
                   )}
                 </td>
-                <td className="py-3.5 px-4 text-center">
-                  <button
-                    onClick={() => setSelectedItem(item)}
-                    className="p-1.5 bg-slate-100 hover:bg-[#1B2E4B] hover:text-white rounded border border-slate-300 text-slate-700 transition-colors"
-                    title="증거 상세 및 보관 사슬 검증"
-                  >
-                    <ExternalLink className="w-3.5 h-3.5" />
-                  </button>
+                <td className="py-3.5 px-4 text-center whitespace-nowrap">
+                  <div className="flex items-center justify-center space-x-1">
+                    <button
+                      onClick={() => handleDownloadEvidenceFile(item)}
+                      className="p-1.5 bg-blue-50 hover:bg-[#0A60C2] hover:text-white rounded border border-blue-200 text-[#0A60C2] transition-colors"
+                      title="증거 파일 다운로드"
+                    >
+                      <Download className="w-3.5 h-3.5" />
+                    </button>
+                    <button
+                      onClick={() => setSelectedItem(item)}
+                      className="p-1.5 bg-slate-100 hover:bg-[#1B2E4B] hover:text-white rounded border border-slate-300 text-slate-700 transition-colors"
+                      title="증거 상세 및 보관 사슬 검증"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
@@ -250,10 +299,18 @@ export const ForensicEvidenceVault: React.FC<ForensicEvidenceVaultProps> = ({
               </div>
             </div>
 
-            <div className="pt-3 border-t border-slate-200 text-right">
+            <div className="pt-3 border-t border-slate-200 flex justify-between items-center">
+              <button
+                onClick={() => handleDownloadEvidenceFile(selectedItem)}
+                className="bg-[#0A60C2] hover:bg-[#084FA3] text-white font-bold text-xs px-4 py-2 rounded transition-colors flex items-center gap-1.5"
+              >
+                <Download className="w-4 h-4" />
+                <span>증거 원본 다운로드</span>
+              </button>
+
               <button
                 onClick={() => setSelectedItem(null)}
-                className="bg-[#1B2E4B] hover:bg-blue-900 text-white font-bold text-xs px-5 py-2.5 rounded transition-colors"
+                className="bg-[#1B2E4B] hover:bg-blue-900 text-white font-bold text-xs px-5 py-2 rounded transition-colors"
               >
                 닫기
               </button>
