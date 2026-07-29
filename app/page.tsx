@@ -29,7 +29,7 @@ import {
   ENTITY_NODES, 
   TRANSACTION_LINKS 
 } from '@/lib/forensicData';
-import { ShieldCheck, BookOpen } from 'lucide-react';
+import { Scale, BookOpen, MessageCircle, ArrowUp } from 'lucide-react';
 
 export default function Home() {
   const [currentCase, setCurrentCase] = useState<CaseInfo>(AVAILABLE_CASES[0]);
@@ -37,7 +37,7 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState<MainTabType>('overview');
   const [isLoaded, setIsLoaded] = useState(false);
   const [showFooterManual, setShowFooterManual] = useState(false);
-  const [isRightPanelOpen, setIsRightPanelOpen] = useState(true);
+  const [isRightPanelOpen, setIsRightPanelOpen] = useState(false);
 
   useEffect(() => {
     const data = getStoredRecords(currentCase.caseNumber);
@@ -72,10 +72,14 @@ export default function Home() {
     setRecords(fresh);
   };
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   if (!isLoaded) {
     return (
-      <div className="min-h-screen bg-[#0A192F] flex items-center justify-center text-amber-300 font-mono text-sm">
-        Kroll Legal Forensic Platform Loading...
+      <div className="min-h-screen bg-[#F8F9FA] flex items-center justify-center text-[#0A60C2] font-mono text-sm font-bold">
+        대한민국 법원 전자소송 연동 Re-Hub 관재인 포털 로딩 중...
       </div>
     );
   }
@@ -83,21 +87,21 @@ export default function Home() {
   const unreviewedCount = records.filter((r) => r.decision.status === 'PENDING').length;
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] text-slate-900 flex flex-col font-sans selection:bg-[#1B2E4B] selection:text-white">
-      {/* 1. Top Pane Header */}
+    <div className="min-h-screen bg-[#F8F9FA] text-[#222222] flex flex-col font-sans selection:bg-[#0A60C2] selection:text-white relative">
+      {/* 1. Top Header (1:1 Supreme Court Portal Bar) */}
       <Header
         currentCase={currentCase}
         onSelectCase={handleSelectCase}
         totalRecords={records.length}
         reviewedRecords={records.length - unreviewedCount}
         onResetData={handleResetData}
-        isRightPanelOpen={isRightPanelOpen}
-        onToggleRightPanel={() => setIsRightPanelOpen(!isRightPanelOpen)}
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
       />
 
       {/* 2. Main 3-to-4 Pane Workspace Body */}
       <div className="flex-1 flex overflow-hidden">
-        {/* Left Pane: Sidebar */}
+        {/* Left Pane: Official Court Sidebar */}
         <Sidebar
           activeTab={activeTab}
           setActiveTab={setActiveTab}
@@ -106,7 +110,7 @@ export default function Home() {
         />
 
         {/* Center Main Workspace */}
-        <main className="flex-1 overflow-y-auto px-6 py-6 bg-[#F8FAFC]">
+        <main className="flex-1 overflow-y-auto px-6 py-6 bg-[#F8F9FA]">
           {activeTab === 'overview' && (
             <CaseOverviewDashboard
               metadata={INITIAL_CASE_METADATA}
@@ -162,52 +166,83 @@ export default function Home() {
         />
       </div>
 
-      {/* 3. Re-Hub Supreme Court SaaS Footer */}
-      <footer className="mt-auto border-t border-slate-300 z-10">
-        {/* Top Tier (#1B2E4B) */}
-        <div className="bg-[#1B2E4B] text-slate-300 text-xs py-2 px-4 border-b border-slate-800">
-          <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2">
-            <div className="flex flex-wrap items-center space-x-3 text-[11px]">
+      {/* 3. Official Supreme Court Electronic Portal 2-Tier Footer (1:1 Court Portal Footer) */}
+      <footer className="mt-auto border-t border-slate-300 z-10 text-xs">
+        {/* Top Tier (#363D48) */}
+        <div className="bg-[#363D48] text-slate-200 py-2.5 px-4 border-b border-[#2B303A]">
+          <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3">
+            <div className="flex flex-wrap items-center space-x-3 text-[11px] text-slate-300">
               <button onClick={() => setShowFooterManual(true)} className="hover:underline font-bold text-white">이용약관</button>
               <span>|</span>
               <button onClick={() => setShowFooterManual(true)} className="hover:underline font-bold text-amber-300">개인정보처리방침</button>
               <span>|</span>
-              <button onClick={() => setShowFooterManual(true)} className="hover:underline flex items-center gap-1 text-blue-200">
-                <BookOpen className="w-3 h-3" />
-                <span>상세 이용 매뉴얼</span>
-              </button>
+              <button onClick={() => setShowFooterManual(true)} className="hover:underline">저작권보호정책</button>
               <span>|</span>
-              <button onClick={() => setShowFooterManual(true)} className="hover:underline">포렌식 가이드라인</button>
+              <button onClick={() => setShowFooterManual(true)} className="hover:underline">링크생성안내</button>
+              <span>|</span>
+              <button onClick={() => setShowFooterManual(true)} className="hover:underline">문제해결 안내</button>
+              <span>|</span>
+              <button onClick={() => setShowFooterManual(true)} className="hover:underline">고객의 소리</button>
+              <span>|</span>
+              <button onClick={() => setShowFooterManual(true)} className="hover:underline">원격지원 서비스</button>
             </div>
 
             <div className="flex items-center space-x-2 text-[11px]">
-              <span className="text-slate-400 font-mono">서울회생법원 실무 준칙 별표 2-2 표준 서식 100% 연동</span>
+              <select className="bg-[#2B303A] text-slate-300 border border-slate-600 rounded px-2 py-0.5">
+                <option>관련사이트</option>
+                <option>대한민국 대법원</option>
+                <option>서울회생법원</option>
+                <option>인터넷등기소</option>
+              </select>
+              <button className="bg-slate-600 hover:bg-slate-500 text-white px-2.5 py-0.5 rounded text-[11px] font-bold">
+                바로가기
+              </button>
             </div>
           </div>
         </div>
 
-        {/* Bottom Tier (#0A192F) */}
-        <div className="bg-[#0A192F] text-slate-400 text-xs py-4 px-4 border-t border-slate-900">
+        {/* Bottom Tier (#2B303A) */}
+        <div className="bg-[#2B303A] text-slate-300 py-6 px-4">
           <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 border border-slate-700 rounded flex items-center justify-center text-amber-300 bg-[#060F1E]">
-                <ShieldCheck className="w-4 h-4 text-emerald-400" />
+            {/* Left Supreme Court Emblem */}
+            <div className="flex items-center space-x-4">
+              <div className="w-10 h-10 border border-slate-600 rounded-full flex items-center justify-center text-white bg-slate-800">
+                <Scale className="w-6 h-6 text-slate-200" />
               </div>
-              <div className="space-y-0.5">
-                <div className="text-white text-xs font-extrabold flex items-center gap-2 font-mono">
-                  <span>Re-Hub Kroll Forensic SaaS</span>
-                  <span className="text-amber-300 text-[10px] bg-slate-800 px-1.5 py-0.2 rounded border border-slate-700">
-                    Supreme Court e-Filing Compliant
-                  </span>
+              <div className="space-y-1 text-xs">
+                <div className="text-white font-bold flex items-center gap-2">
+                  <span>이용 및 장애 문의 : 02) 3480-1715</span>
+                  <span className="text-slate-400 text-[11px]">(평일 9시~18시)</span>
                 </div>
                 <div className="text-[10px] text-slate-400 font-mono">
-                  COPYRIGHT © 2025 RE-HUB FORENSIC PLATFORM. ALL RIGHTS RESERVED.
+                  COPYRIGHT © 2025 RE-HUB / SUPREME COURT OF KOREA. ALL RIGHTS RESERVED.
                 </div>
+              </div>
+            </div>
+
+            {/* Right Web Accessibility Badge & Floating Buttons */}
+            <div className="flex items-center space-x-4">
+              <div className="bg-slate-800 border border-slate-700 px-3 py-1 rounded text-center text-[10px] font-mono text-slate-300">
+                WA Web Accessibility Certified
               </div>
             </div>
           </div>
         </div>
       </footer>
+
+      {/* Floating Chat Icon & TOP Button (1:1 Court Screenshot) */}
+      <div className="fixed bottom-6 right-6 flex flex-col space-y-2 z-40">
+        <button className="w-11 h-11 bg-[#0A60C2] hover:bg-[#084FA3] text-white rounded-full flex items-center justify-center shadow-xl transition-all">
+          <MessageCircle className="w-5 h-5" />
+        </button>
+        <button 
+          onClick={scrollToTop}
+          className="bg-white border border-slate-300 text-slate-800 text-[10px] font-bold px-2 py-1 rounded-full shadow-md hover:bg-slate-100 flex items-center justify-center space-x-0.5"
+        >
+          <span>TOP</span>
+          <ArrowUp className="w-3 h-3" />
+        </button>
+      </div>
 
       {/* Footer User Manual Modal */}
       <UserManualModal

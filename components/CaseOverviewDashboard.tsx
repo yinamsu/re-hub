@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   Scale, 
   Clock, 
@@ -11,9 +11,13 @@ import {
   FileText, 
   ShieldCheck, 
   ArrowRight,
-  TrendingDown,
-  Calendar,
-  Layers
+  Search,
+  Printer,
+  Plus,
+  Info,
+  ChevronLeft,
+  ChevronRight,
+  ChevronDown
 } from 'lucide-react';
 import { CaseOverviewMetadata } from '@/types/forensic';
 import { ReconciliationRecord } from '@/types/reconciliation';
@@ -29,210 +33,190 @@ export const CaseOverviewDashboard: React.FC<CaseOverviewDashboardProps> = ({
   records,
   onNavigateToTab,
 }) => {
+  const [searchFilterType, setSearchFilterType] = useState('ALL');
+  const [selectedDateRange, setSelectedDateRange] = useState('ALL');
+
   const totalClaimsCount = records.length;
   const totalDeclaredAmount = records.reduce((acc, r) => acc + r.creditor.declaredPrincipal + r.creditor.declaredInterest, 0);
   const totalAdmittedAmount = records.reduce((acc, r) => acc + r.decision.admittedTotal, 0);
   const totalDeniedAmount = records.reduce((acc, r) => acc + r.decision.deniedAmount, 0);
-  const reviewedCount = records.filter((r) => r.decision.status !== 'PENDING').length;
-  const discrepancyCount = records.filter((r) => r.ledger.hasDiscrepancy).length;
-
-  const procedureStages = [
-    { stage: 1, title: '회생 개시 신청', date: '2025-01-05', status: 'COMPLETED' },
-    { stage: 2, title: '개시 결정 고시', date: '2025-01-15', status: 'COMPLETED' },
-    { stage: 3, title: '채권 신고 & 시부인 심사', date: '진행 중 (D-30)', status: 'IN_PROGRESS' },
-    { stage: 4, title: '시부인 명세서 법원 제출', date: '2025-02-28 예정', status: 'UPCOMING' },
-    { stage: 5, title: '제1회 관계인 집회', date: '2025-04-15 예정', status: 'UPCOMING' },
-    { stage: 6, title: '회생 계획안 인가 결정', date: '2025-05-30 예정', status: 'UPCOMING' },
-  ];
 
   return (
-    <div className="space-y-6 pb-12">
-      {/* 1. Top Case Overview Banner Header */}
-      <div className="bg-[#1B2E4B] text-white p-6 rounded shadow-md border-l-4 border-l-[#004E98] border border-[#0A192F] relative overflow-hidden">
-        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
-          <div>
-            <div className="flex items-center space-x-2 text-slate-300 text-xs font-mono mb-1">
-              <span className="bg-[#004E98] text-white px-2 py-0.5 rounded font-bold">{metadata.courtBranch}</span>
-              <span>•</span>
-              <span>사건번호: {metadata.caseNumber}</span>
-            </div>
-            <h1 className="text-2xl font-black text-white tracking-tight flex items-center gap-3">
-              <span>{metadata.caseName}</span>
-              <span className="text-xs bg-[#2F855A] text-white px-2.5 py-1 rounded font-bold font-mono">
-                PROCEDURE ACTIVE
-              </span>
-            </h1>
-            <p className="text-slate-300 text-xs mt-1 max-w-2xl leading-relaxed">
-              관재인 법정 조사 및 3-Way 시부인 심사, 디지털 포렌식 증거 관리 종합 플랫폼.
-            </p>
-          </div>
+    <div className="space-y-6 pb-12 text-[#222222]">
+      {/* 1. Official Court Page Title & Utility Controls (1:1 Court Portal Header) */}
+      <div className="flex justify-between items-center pb-2 border-b-2 border-[#1C2A45]">
+        <div className="flex items-center space-x-2">
+          <span className="w-2.5 h-2.5 rounded-full border-2 border-[#0A60C2] bg-white inline-block"></span>
+          <h1 className="text-xl font-black text-[#1C2A45]">진행중사건 (회생채권 시부인 심사 대시보드)</h1>
+        </div>
 
-          <div className="flex items-center space-x-3 bg-[#0A192F] p-3.5 rounded border border-[#334e68]">
-            <Scale className="w-8 h-8 text-amber-300 flex-shrink-0" />
-            <div className="text-xs font-mono">
-              <div className="text-slate-400">선임 관재인</div>
-              <div className="font-bold text-white text-sm">{metadata.administrator}</div>
-            </div>
-          </div>
+        <div className="flex items-center space-x-2 text-xs">
+          <button className="bg-white border border-[#D5DBE2] hover:bg-slate-50 px-2.5 py-1 rounded text-slate-700 font-bold flex items-center gap-1 shadow-sm">
+            <Plus className="w-3.5 h-3.5 text-[#0A60C2]" /> 나의 메뉴 추가
+          </button>
+          <button className="bg-white border border-[#D5DBE2] hover:bg-slate-50 px-2.5 py-1 rounded text-slate-700 font-bold flex items-center gap-1 shadow-sm">
+            <Printer className="w-3.5 h-3.5 text-slate-600" /> 출력
+          </button>
         </div>
       </div>
 
-      {/* 2. D-Day Countdown Cards & Key Case Metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        {/* Card 1: D-Day Claims Deadline */}
-        <div className="bg-white border-2 border-[#C53030] p-4 rounded shadow-sm relative overflow-hidden">
-          <div className="flex justify-between items-start">
-            <div>
-              <div className="text-xs font-bold text-[#C53030] flex items-center gap-1">
-                <Clock className="w-4 h-4" /> 회생채권 신고 마감기한
-              </div>
-              <div className="text-2xl font-black text-slate-900 font-mono mt-1">D-30 일</div>
+      {/* 2. Official Supreme Court Search Filter Box (1:1 Court Portal Filter) */}
+      <div className="bg-white border border-[#D5DBE2] rounded p-4 space-y-3 shadow-sm">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-3 text-xs">
+          <div className="flex items-center space-x-2">
+            <span className="font-bold text-slate-700 w-16">소송유형</span>
+            <select className="flex-1 bg-white border border-[#D5DBE2] rounded p-1.5 text-slate-800">
+              <option value="ALL">전체 (도산/회생채권)</option>
+              <option value="REHAB">회생절차 사건</option>
+              <option value="BANKRUPT">파산절차 사건</option>
+            </select>
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <span className="font-bold text-slate-700 w-12">법원</span>
+            <select className="flex-1 bg-white border border-[#D5DBE2] rounded p-1.5 text-slate-800">
+              <option value="SEOUL">서울회생법원 제11파산부</option>
+              <option value="SUWON">수원회생법원</option>
+              <option value="BUSAN">부산회생법원</option>
+            </select>
+          </div>
+
+          <div className="md:col-span-2 flex items-center space-x-3">
+            <div className="flex items-center space-x-2 font-bold text-slate-700">
+              <label className="flex items-center space-x-1 cursor-pointer">
+                <input type="radio" name="searchRange" defaultChecked className="text-[#0A60C2]" />
+                <span>접수일자</span>
+              </label>
+              <label className="flex items-center space-x-1 cursor-pointer">
+                <input type="radio" name="searchRange" className="text-[#0A60C2]" />
+                <span>사건번호</span>
+              </label>
             </div>
-            <span className="bg-[#FFF1F2] text-[#C53030] border border-rose-300 text-[10px] font-bold px-2 py-0.5 rounded">
-              마감임박
-            </span>
-          </div>
-          <div className="text-[11px] text-slate-500 font-mono mt-2 pt-2 border-t border-slate-200">
-            기한: {metadata.claimsSubmissionDeadline}
+
+            <div className="flex items-center space-x-1">
+              <button onClick={() => setSelectedDateRange('TODAY')} className={`px-2 py-1 border rounded text-[11px] font-bold ${selectedDateRange === 'TODAY' ? 'bg-[#0A60C2] text-white border-[#0A60C2]' : 'bg-white text-slate-700 border-slate-300'}`}>오늘</button>
+              <button onClick={() => setSelectedDateRange('3DAYS')} className={`px-2 py-1 border rounded text-[11px] font-bold ${selectedDateRange === '3DAYS' ? 'bg-[#0A60C2] text-white border-[#0A60C2]' : 'bg-white text-slate-700 border-slate-300'}`}>3일</button>
+              <button onClick={() => setSelectedDateRange('1WEEK')} className={`px-2 py-1 border rounded text-[11px] font-bold ${selectedDateRange === '1WEEK' ? 'bg-[#0A60C2] text-white border-[#0A60C2]' : 'bg-white text-slate-700 border-slate-300'}`}>1주일</button>
+              <button onClick={() => setSelectedDateRange('1MONTH')} className={`px-2 py-1 border rounded text-[11px] font-bold ${selectedDateRange === '1MONTH' ? 'bg-[#0A60C2] text-white border-[#0A60C2]' : 'bg-white text-slate-700 border-slate-300'}`}>1개월</button>
+              <button onClick={() => setSelectedDateRange('ALL')} className={`px-2 py-1 border rounded text-[11px] font-bold ${selectedDateRange === 'ALL' ? 'bg-[#0A60C2] text-white border-[#0A60C2]' : 'bg-white text-slate-700 border-slate-300'}`}>전체</button>
+            </div>
           </div>
         </div>
 
-        {/* Card 2: Total Claimed Amount */}
-        <div className="bg-white border border-[#CBD5E1] p-4 rounded shadow-sm">
-          <div className="text-xs font-bold text-slate-600 flex items-center gap-1">
-            <FileText className="w-4 h-4 text-[#1B2E4B]" /> 신고 채권 총액 ({totalClaimsCount}건)
-          </div>
-          <div className="text-xl font-black text-[#1B2E4B] font-mono mt-1">
-            {totalDeclaredAmount.toLocaleString()} 원
-          </div>
-          <div className="text-[11px] text-slate-500 mt-2 pt-2 border-t border-slate-200 flex justify-between font-mono">
-            <span>심사 완료:</span>
-            <span className="font-bold text-slate-900">{reviewedCount} / {totalClaimsCount} 건</span>
-          </div>
-        </div>
-
-        {/* Card 3: Admitted Amount */}
-        <div className="bg-white border border-[#CBD5E1] p-4 rounded shadow-sm">
-          <div className="text-xs font-bold text-[#2F855A] flex items-center gap-1">
-            <CheckCircle2 className="w-4 h-4 text-[#2F855A]" /> 관재인 시인 총액
-          </div>
-          <div className="text-xl font-black text-[#2F855A] font-mono mt-1">
-            {totalAdmittedAmount.toLocaleString()} 원
-          </div>
-          <div className="text-[11px] text-slate-500 mt-2 pt-2 border-t border-slate-200 flex justify-between font-mono">
-            <span>시인 비율:</span>
-            <span className="font-bold text-[#2F855A]">
-              {totalDeclaredAmount ? Math.round((totalAdmittedAmount / totalDeclaredAmount) * 100) : 0}%
-            </span>
-          </div>
-        </div>
-
-        {/* Card 4: Discrepancy & Denied Amount */}
-        <div className="bg-white border border-[#CBD5E1] p-4 rounded shadow-sm">
-          <div className="text-xs font-bold text-[#D69E2E] flex items-center gap-1">
-            <AlertTriangle className="w-4 h-4 text-[#D69E2E]" /> 장부 불일치 / 부인액
-          </div>
-          <div className="text-xl font-black text-[#C53030] font-mono mt-1">
-            {totalDeniedAmount.toLocaleString()} 원
-          </div>
-          <div className="text-[11px] text-slate-500 mt-2 pt-2 border-t border-slate-200 flex justify-between font-mono">
-            <span>불일치 채권:</span>
-            <span className="font-bold text-[#C53030]">{discrepancyCount} 건 감지됨</span>
-          </div>
+        {/* Centered Teal Search Button ('조회' 1:1) */}
+        <div className="pt-2 border-t border-slate-100 text-center">
+          <button className="bg-[#008097] hover:bg-[#006B7F] text-white font-extrabold text-xs px-10 py-2 rounded transition-colors shadow">
+            조회
+          </button>
         </div>
       </div>
 
-      {/* 3. 6-Stage Insolvency Procedure Progress Bar */}
-      <div className="bg-white border border-[#CBD5E1] rounded p-6 shadow-sm space-y-4">
-        <div className="flex justify-between items-center border-b border-slate-200 pb-3">
-          <div className="flex items-center space-x-2 text-[#1B2E4B] font-bold text-sm">
-            <Layers className="w-4 h-4 text-[#004E98]" />
-            <span>회생절차 6단계 공정 진행 상태</span>
+      {/* 3. Official Supreme Court Table Structure (1:1 Court Portal Table) */}
+      <div className="bg-white border border-[#D5DBE2] rounded overflow-hidden shadow-sm space-y-2">
+        <div className="p-3 bg-[#F8F9FA] border-b border-[#D5DBE2] flex items-center justify-between text-xs font-bold">
+          <div className="flex items-center space-x-2">
+            <span className="text-[#1C2A45]">전체 사건 목록 (총 {records.length}건)</span>
+            <span className="text-[11px] text-slate-500 font-mono">사건번호: {metadata.caseNumber}</span>
           </div>
-          <span className="text-xs font-mono font-bold text-[#004E98]">
-            현재 단계: 3단계 (채권 신고 & 시부인 심사)
-          </span>
+
+          <div className="flex items-center space-x-2">
+            <button onClick={() => onNavigateToTab('dashboard')} className="bg-white border border-[#0A60C2] text-[#0A60C2] hover:bg-[#EDF5FC] px-2.5 py-1 rounded text-xs font-bold">
+              관심사건 지정
+            </button>
+            <button onClick={() => onNavigateToTab('export')} className="bg-[#2F855A] text-white hover:bg-emerald-800 px-2.5 py-1 rounded text-xs font-bold flex items-center gap-1">
+              📊 엑셀로 저장 (별표 2-2)
+            </button>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-6 gap-2 pt-2">
-          {procedureStages.map((s) => {
-            const isCompleted = s.status === 'COMPLETED';
-            const isInProgress = s.status === 'IN_PROGRESS';
+        <table className="w-full text-left text-xs">
+          <thead className="bg-[#F0F4F8] text-[#222222] font-bold border-b border-[#D5DBE2]">
+            <tr>
+              <th className="py-2.5 px-3 w-10 text-center"><input type="checkbox" /></th>
+              <th className="py-2.5 px-3">관할법원</th>
+              <th className="py-2.5 px-3">사건번호</th>
+              <th className="py-2.5 px-3">재판부</th>
+              <th className="py-2.5 px-3">신고번호</th>
+              <th className="py-2.5 px-3">채권자명 (원고)</th>
+              <th className="py-2.5 px-3 text-right">신고 채권총액</th>
+              <th className="py-2.5 px-3 text-right">관재인 시인액</th>
+              <th className="py-2.5 px-3 text-center">시부인 상태</th>
+              <th className="py-2.5 px-3 text-center">바로가기</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-[#E2E8F0]">
+            {records.map((r) => {
+              const totalDeclared = r.creditor.declaredPrincipal + r.creditor.declaredInterest;
 
-            return (
-              <div
-                key={s.stage}
-                className={`p-3 rounded border text-xs flex flex-col justify-between space-y-2 ${
-                  isInProgress
-                    ? 'bg-[#1B2E4B] text-white border-[#004E98] shadow-md ring-2 ring-blue-500/50'
-                    : isCompleted
-                    ? 'bg-[#ECFDF5] text-slate-800 border-emerald-300'
-                    : 'bg-[#F8FAFC] text-slate-400 border-slate-200'
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <span className={`font-mono text-[10px] font-bold px-1.5 py-0.2 rounded ${
-                    isInProgress ? 'bg-amber-300 text-slate-900' : isCompleted ? 'bg-emerald-700 text-white' : 'bg-slate-200 text-slate-600'
-                  }`}>
-                    STEP 0{s.stage}
-                  </span>
-                  {isCompleted && <CheckCircle2 className="w-3.5 h-3.5 text-[#2F855A]" />}
-                </div>
+              return (
+                <tr key={r.id} className="hover:bg-[#F0F4F8] transition-colors">
+                  <td className="py-3 px-3 text-center"><input type="checkbox" /></td>
+                  <td className="py-3 px-3 font-bold text-slate-700">서울회생법원</td>
+                  <td className="py-3 px-3 font-mono font-bold text-[#0066CC] underline cursor-pointer" onClick={() => onNavigateToTab('dashboard')}>
+                    {r.caseNumber}
+                  </td>
+                  <td className="py-3 px-3 text-slate-600">제11파산부</td>
+                  <td className="py-3 px-3 font-mono font-bold text-slate-800">{r.creditor.filingNo}</td>
+                  <td className="py-3 px-3 font-bold text-slate-900">{r.creditor.creditorName}</td>
+                  <td className="py-3 px-3 font-mono font-bold text-right text-slate-900">{totalDeclared.toLocaleString()}원</td>
+                  <td className="py-3 px-3 font-mono font-bold text-right text-[#0A60C2]">{r.decision.admittedTotal.toLocaleString()}원</td>
+                  <td className="py-3 px-3 text-center font-bold">
+                    {r.decision.status === 'ADMITTED' && <span className="bg-[#ECFDF5] text-[#2F855A] border border-emerald-300 px-2 py-0.5 rounded text-[10px]">전액시인</span>}
+                    {r.decision.status === 'DENIED' && <span className="bg-[#FFF1F2] text-[#C53030] border border-rose-300 px-2 py-0.5 rounded text-[10px]">전액부인</span>}
+                    {r.decision.status === 'PARTIALLY_ADMITTED' && <span className="bg-[#FFFBEB] text-[#D69E2E] border border-amber-300 px-2 py-0.5 rounded text-[10px]">일부시인</span>}
+                    {r.decision.status === 'PENDING' && <span className="bg-slate-100 text-slate-600 border border-slate-300 px-2 py-0.5 rounded text-[10px]">미심사</span>}
+                  </td>
+                  <td className="py-3 px-3 text-center">
+                    <button 
+                      onClick={() => onNavigateToTab('dashboard')}
+                      className="bg-white border border-[#CCCCCC] hover:border-[#0A60C2] text-slate-800 px-2.5 py-1 rounded text-[11px] font-bold shadow-sm"
+                    >
+                      메뉴선택
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
 
-                <div className="font-bold text-xs leading-snug">{s.title}</div>
-                <div className="text-[10px] font-mono opacity-80">{s.date}</div>
-              </div>
-            );
-          })}
+        {/* Pagination Controls (1:1 Court Portal Pagination) */}
+        <div className="p-3 bg-white flex items-center justify-between border-t border-[#D5DBE2] text-xs">
+          <div className="text-slate-500 font-mono">총 {records.length}건</div>
+
+          <div className="flex items-center space-x-1 font-mono font-bold text-slate-700">
+            <button className="px-2 py-1 border border-slate-300 rounded hover:bg-slate-100">{'<<'}</button>
+            <button className="px-2 py-1 border border-slate-300 rounded hover:bg-slate-100">{'<'}</button>
+            <button className="px-3 py-1 bg-[#0A60C2] text-white rounded font-bold">1</button>
+            <button className="px-2 py-1 border border-slate-300 rounded hover:bg-slate-100">{'>'}</button>
+            <button className="px-2 py-1 border border-slate-300 rounded hover:bg-slate-100">{">>"}</button>
+          </div>
+
+          <select className="bg-white border border-slate-300 rounded px-2 py-1 text-slate-700">
+            <option>10개씩 보기</option>
+            <option>20개씩 보기</option>
+          </select>
         </div>
       </div>
 
-      {/* 4. Quick Action Navigation Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <button
-          onClick={() => onNavigateToTab('dashboard')}
-          className="bg-white border border-[#CBD5E1] p-5 rounded hover:border-[#1B2E4B] hover:shadow-md transition-all text-left group flex justify-between items-center"
-        >
-          <div>
-            <div className="text-xs font-bold text-[#1B2E4B] group-hover:text-blue-900">
-              3-Way 시부인 대시보드 바로가기
-            </div>
-            <div className="text-[11px] text-slate-500 mt-1">
-              장부 vs 신고액 교차 검증 및 관재인 수동/자동 판정
-            </div>
-          </div>
-          <ArrowRight className="w-5 h-5 text-slate-400 group-hover:text-[#1B2E4B] transition-transform group-hover:translate-x-1" />
-        </button>
+      {/* 4. Official Supreme Court Notice Box ('참고하세요' 1:1) */}
+      <div className="bg-[#EDF5FC] border border-[#B2D4F5] rounded p-5 space-y-2 text-xs text-[#333333]">
+        <div className="flex items-center space-x-2 text-[#0A60C2] font-black text-sm pb-2 border-b border-[#B2D4F5]">
+          <Info className="w-5 h-5 text-[#0A60C2]" />
+          <span>참고하세요</span>
+        </div>
 
-        <button
-          onClick={() => onNavigateToTab('evidence')}
-          className="bg-white border border-[#CBD5E1] p-5 rounded hover:border-[#1B2E4B] hover:shadow-md transition-all text-left group flex justify-between items-center"
-        >
-          <div>
-            <div className="text-xs font-bold text-[#1B2E4B] group-hover:text-blue-900">
-              디지털 증거보관소 (Chain of Custody)
-            </div>
-            <div className="text-[11px] text-slate-500 mt-1">
-              SHA-256 해시 검증 및 갑/을 호증 서류 포렌식
-            </div>
-          </div>
-          <ArrowRight className="w-5 h-5 text-slate-400 group-hover:text-[#1B2E4B] transition-transform group-hover:translate-x-1" />
-        </button>
-
-        <button
-          onClick={() => onNavigateToTab('graph')}
-          className="bg-white border border-[#CBD5E1] p-5 rounded hover:border-[#1B2E4B] hover:shadow-md transition-all text-left group flex justify-between items-center"
-        >
-          <div>
-            <div className="text-xs font-bold text-[#1B2E4B] group-hover:text-blue-900">
-              자금흐름 & 관계망 그래프 바로가기
-            </div>
-            <div className="text-[11px] text-slate-500 mt-1">
-              특수관계인 계좌 추적 및 자금 유출 노드 시각화
-            </div>
-          </div>
-          <ArrowRight className="w-5 h-5 text-slate-400 group-hover:text-[#1B2E4B] transition-transform group-hover:translate-x-1" />
-        </button>
+        <ul className="space-y-1.5 pl-4 list-disc text-slate-700 leading-relaxed text-[11px]">
+          <li>
+            전자소송인증 없이 전자소송사건등록을 한 대리인이나 참가신청을 한 참가인은 시부인명세서 확인 전에 사건기록열람 신청을 완료해주시기 바랍니다.
+          </li>
+          <li>
+            본소에 병합된 사건의 경우 소송서류제출, 소송비용납부, 알림시스템설정을 할 수 없으며, 본소 사건번호로 진행하시기 바랍니다.
+          </li>
+          <li>
+            재판적조회(김장인, 조장위원 등), 전자채권인, 법무법인 소속변호사는 시부인 심사 완료 후 시부인 명세서 Excel (별표 2-2) 서식을 최종 다운로드하여 법원 제출용으로 활용하실 수 있습니다.
+          </li>
+        </ul>
       </div>
     </div>
   );

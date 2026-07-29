@@ -8,35 +8,21 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        court: {
-          navy: '#1B2E4B',
-          darkNavy: '#0A192F',
-          blue: '#004E98',
-          slate: '#4A5568',
-          bg: '#F8FAFC',
-          panel: '#F1F5F9',
-          border: '#CBD5E1',
-          crimson: '#C53030',
-          amber: '#D69E2E',
-          green: '#2F855A',
+        ecourt: {
+          blue: '#0A60C2',       // Official Court Primary Blue (나의전자소송 탭)
+          hoverBlue: '#084FA3',
+          teal: '#008097',       // Official Court '조회' Search Teal Button
+          hoverTeal: '#006B7F',
+          darkNavy: '#1C2A45',
+          tableHeader: '#F0F4F8',// Official Court Table Header Light Blue-Gray
+          border: '#D5DBE2',     // Official Court Table Border
+          bg: '#F8F9FA',         // Official Court Main Background
+          noticeBg: '#EDF5FC',   // Official Court Notice Box ('참고하세요')
+          noticeBorder: '#B2D4F5',
+          linkBlue: '#0066CC',   // Official Court Link Blue (Underline)
+          footerTop: '#363D48',  // Official Court Footer Top Tier
+          footerBottom: '#2B303A',// Official Court Footer Bottom Tier
         },
-        navy: {
-          50: '#f0f4f8',
-          100: '#d9e2ec',
-          200: '#bcccdc',
-          300: '#9fb3c8',
-          400: '#829ab1',
-          500: '#627d98',
-          600: '#486581',
-          700: '#334e68',
-          800: '#1B2E4B',
-          900: '#0A192F',
-          950: '#060F1E',
-        },
-      },
-      borderRadius: {
-        'sharp': '2px',
-        'court': '4px',
       },
       fontFamily: {
         sans: ['Pretendard', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Noto Sans KR', 'sans-serif'],

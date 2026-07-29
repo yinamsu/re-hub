@@ -6,60 +6,73 @@
 
 :root {
   --font-pretendard: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
-  --court-navy: #1B2E4B;
-  --court-dark-navy: #0A192F;
-  --court-blue: #004E98;
-  --court-bg: #F8FAFC;
-  --court-panel: #F1F5F9;
-  --court-border: #CBD5E1;
-  --court-crimson: #C53030;
-  --court-amber: #D69E2E;
-  --court-green: #2F855A;
+  --ecourt-blue: #0A60C2;
+  --ecourt-teal: #008097;
+  --ecourt-dark-navy: #1C2A45;
+  --ecourt-table-header: #F0F4F8;
+  --ecourt-border: #D5DBE2;
+  --ecourt-bg: #F8F9FA;
+  --ecourt-notice-bg: #EDF5FC;
+  --ecourt-notice-border: #B2D4F5;
+  --ecourt-link-blue: #0066CC;
 }
 
 body {
   font-family: var(--font-pretendard);
-  background-color: var(--court-bg);
-  color: #1E293B;
+  background-color: var(--ecourt-bg);
+  color: #222222;
   -webkit-font-smoothing: antialiased;
 }
 
-/* Sharp, Dense Supreme Court Border Utility */
-.court-border {
-  border: 1px solid var(--court-border);
+/* Official Court Portal Table & Panel Styles */
+.ecourt-[#0A60C2] {
+  border: 1px solid #D5DBE2;
 }
 
-.court-card {
+.ecourt-card {
   background-color: #FFFFFF;
-  border: 1px solid #CBD5E1;
-  border-radius: 4px;
+  border: 1px solid #D5DBE2;
+  border-radius: 2px;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
 }
 
-.court-table-header {
-  background-color: #1B2E4B;
-  color: #FFFFFF;
+.ecourt-table-header {
+  background-color: #F0F4F8;
+  color: #222222;
   font-weight: 700;
   font-size: 12px;
+  border-bottom: 2px solid #1C2A45;
 }
 
-/* Official Court Portal Scrollbar */
+.ecourt-[#0066CC] {
+  color: #0066CC;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.ecourt-notice-box {
+  background-color: #EDF5FC;
+  border: 1px solid #B2D4F5;
+  border-radius: 4px;
+}
+
+/* Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #F1F5F9;
+  background: #F8F9FA;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #94A3B8;
+  background: #C0C7D0;
   border-radius: 2px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #64748B;
+  background: #94A3B8;
 }
 
 /* Remove Number Spinner */

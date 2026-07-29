@@ -1,17 +1,18 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { 
-  LayoutDashboard, 
+  ChevronDown, 
+  ChevronRight, 
+  FileText, 
   GitCompare, 
   FolderLock, 
   History, 
   Network, 
   FileSpreadsheet, 
   UserCheck, 
-  ChevronRight,
-  ShieldCheck,
-  Scale
+  LayoutDashboard,
+  Check
 } from 'lucide-react';
 
 export type MainTabType = 
@@ -36,133 +37,134 @@ export const Sidebar: React.FC<SidebarProps> = ({
   evidenceCount,
   unreviewedCount,
 }) => {
-  const menuItems = [
-    {
-      id: 'overview' as MainTabType,
-      label: '사건 개요 & 진행',
-      icon: LayoutDashboard,
-      badge: 'D-30',
-      badgeColor: 'bg-[#1B2E4B] text-amber-300',
-      description: '재판부/당사자/절차 진행바',
-    },
-    {
-      id: 'dashboard' as MainTabType,
-      label: '3-Way 채권 시부인',
-      icon: GitCompare,
-      badge: unreviewedCount > 0 ? `${unreviewedCount}건 대기` : '완료',
-      badgeColor: unreviewedCount > 0 ? 'bg-amber-100 text-amber-900 border border-amber-300' : 'bg-emerald-100 text-emerald-900',
-      description: '장부 vs 신고 vs 관재인 판정',
-    },
-    {
-      id: 'evidence' as MainTabType,
-      label: '디지털 증거보관소',
-      icon: FolderLock,
-      badge: `${evidenceCount}개 증증`,
-      badgeColor: 'bg-[#004E98] text-white',
-      description: 'Chain of Custody & 해시검증',
-    },
-    {
-      id: 'timeline' as MainTabType,
-      label: '타임라인 & 쟁점 대조',
-      icon: History,
-      badge: 'Dual Grid',
-      badgeColor: 'bg-[#1B2E4B] text-slate-200',
-      description: '주장 vs 항변 대조 포렌식',
-    },
-    {
-      id: 'graph' as MainTabType,
-      label: '자금흐름 & 관계망',
-      icon: Network,
-      badge: 'Node-Link',
-      badgeColor: 'bg-[#C53030] text-white',
-      description: '특수관계인 계좌추적 그래프',
-    },
-    {
-      id: 'export' as MainTabType,
-      label: '법원 제출 명세서 (별표2-2)',
-      icon: FileSpreadsheet,
-      badge: 'Excel',
-      badgeColor: 'bg-emerald-800 text-white',
-      description: '서울회생법원 표준 서식 출력',
-    },
-    {
-      id: 'creditor-self' as MainTabType,
-      label: '채권자 셀프 전자신고',
-      icon: UserCheck,
-      badge: '포털',
-      badgeColor: 'bg-slate-700 text-slate-200',
-      description: '채권자 직접 서류 접수',
-    },
-  ];
+  const [isCaseManagementOpen, setIsCaseManagementOpen] = useState(true);
 
   return (
-    <aside className="w-64 bg-[#0A192F] text-slate-200 border-r border-[#1B2E4B] flex flex-col justify-between select-none">
-      {/* Top Section: System Header */}
+    <aside className="w-56 bg-[#F8F9FA] text-[#333333] border-r border-[#D5DBE2] flex flex-col justify-between select-none">
       <div>
-        <div className="p-4 border-b border-[#1B2E4B] bg-[#060F1E] flex items-center space-x-3">
-          <div className="w-8 h-8 bg-[#1B2E4B] border border-[#004E98] rounded flex items-center justify-center text-amber-300 shadow">
-            <Scale className="w-5 h-5 text-emerald-400" />
-          </div>
-          <div>
-            <div className="text-xs font-black tracking-widest text-white uppercase font-mono">
-              KROLL FORENSIC
-            </div>
-            <div className="text-[10px] text-slate-400 font-medium">
-              대법원 전자소송 연동 시스템
-            </div>
-          </div>
+        {/* 1. Official Court Blue Header Tab ('나의전자소송' 1:1) */}
+        <div className="relative bg-[#0A60C2] text-white p-3.5 flex items-center justify-between font-bold text-sm shadow-sm">
+          <span>나의전자소송</span>
+          {/* Right Pointer Triangle Icon */}
+          <div className="w-0 h-0 border-t-8 border-t-transparent border-b-8 border-b-transparent border-l-8 border-l-[#0A60C2] absolute -right-2 top-1/2 -translate-y-1/2 z-10"></div>
         </div>
 
-        {/* Navigation Menu List */}
-        <div className="p-2 space-y-1">
-          <div className="px-3 py-2 text-[10px] font-extrabold text-slate-400 uppercase tracking-wider font-mono">
-            사건 분석 & 포렌식 모듈
+        {/* 2. Structured Accordion Menu (1:1 Court Portal Style) */}
+        <div className="text-xs space-y-0.5 pt-2">
+          {/* Menu Item 1: 나의사건현황 */}
+          <button 
+            onClick={() => setActiveTab('overview')}
+            className={`w-full text-left px-4 py-2.5 flex items-center justify-between hover:bg-[#EBF0F5] transition-colors border-b border-[#E8ECEF] ${
+              activeTab === 'overview' ? 'font-bold text-[#0A60C2] bg-white' : 'text-[#444444]'
+            }`}
+          >
+            <span>나의사건현황</span>
+          </button>
+
+          {/* Menu Item 2: 나의사건관리 (Collapsible Header) */}
+          <div className="border-b border-[#E8ECEF]">
+            <button
+              onClick={() => setIsCaseManagementOpen(!isCaseManagementOpen)}
+              className="w-full text-left px-4 py-2.5 flex items-center justify-between font-bold text-[#222222] hover:bg-[#EBF0F5] transition-colors"
+            >
+              <span>나의사건관리</span>
+              <ChevronDown className={`w-3.5 h-3.5 text-slate-500 transition-transform ${isCaseManagementOpen ? 'rotate-180' : ''}`} />
+            </button>
+
+            {isCaseManagementOpen && (
+              <div className="bg-white py-1 space-y-0.5 border-t border-[#F0F4F8]">
+                <button
+                  onClick={() => setActiveTab('overview')}
+                  className={`w-full text-left pl-7 pr-4 py-2 flex items-center justify-between hover:bg-[#F0F4F8] transition-colors ${
+                    activeTab === 'overview' ? 'font-bold text-[#0A60C2] bg-[#EDF5FC]' : 'text-[#555555]'
+                  }`}
+                >
+                  <span className="flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#0A60C2] inline-block"></span> 진행중사건
+                  </span>
+                </button>
+
+                <button
+                  onClick={() => setActiveTab('dashboard')}
+                  className={`w-full text-left pl-7 pr-4 py-2 flex items-center justify-between hover:bg-[#F0F4F8] transition-colors ${
+                    activeTab === 'dashboard' ? 'font-bold text-[#0A60C2] bg-[#EDF5FC]' : 'text-[#555555]'
+                  }`}
+                >
+                  <span>3-Way 채권시부인</span>
+                  {unreviewedCount > 0 && (
+                    <span className="text-[10px] bg-amber-100 text-amber-900 border border-amber-300 font-bold px-1.5 py-0.2 rounded font-mono">
+                      {unreviewedCount}대기
+                    </span>
+                  )}
+                </button>
+
+                <button
+                  onClick={() => setActiveTab('evidence')}
+                  className={`w-full text-left pl-7 pr-4 py-2 flex items-center justify-between hover:bg-[#F0F4F8] transition-colors ${
+                    activeTab === 'evidence' ? 'font-bold text-[#0A60C2] bg-[#EDF5FC]' : 'text-[#555555]'
+                  }`}
+                >
+                  <span>포렌식 증거보관소</span>
+                </button>
+
+                <button
+                  onClick={() => setActiveTab('timeline')}
+                  className={`w-full text-left pl-7 pr-4 py-2 flex items-center justify-between hover:bg-[#F0F4F8] transition-colors ${
+                    activeTab === 'timeline' ? 'font-bold text-[#0A60C2] bg-[#EDF5FC]' : 'text-[#555555]'
+                  }`}
+                >
+                  <span>타임라인 쟁점대조</span>
+                </button>
+
+                <button
+                  onClick={() => setActiveTab('graph')}
+                  className={`w-full text-left pl-7 pr-4 py-2 flex items-center justify-between hover:bg-[#F0F4F8] transition-colors ${
+                    activeTab === 'graph' ? 'font-bold text-[#0A60C2] bg-[#EDF5FC]' : 'text-[#555555]'
+                  }`}
+                >
+                  <span>자금관계망 분석</span>
+                </button>
+              </div>
+            )}
           </div>
 
-          {menuItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = activeTab === item.id;
+          {/* Menu Item 3: 서류 제출 및 서식 */}
+          <button 
+            onClick={() => setActiveTab('export')}
+            className={`w-full text-left px-4 py-2.5 flex items-center justify-between hover:bg-[#EBF0F5] transition-colors border-b border-[#E8ECEF] ${
+              activeTab === 'export' ? 'font-bold text-[#0A60C2] bg-white' : 'text-[#444444]'
+            }`}
+          >
+            <span>법원 제출 명세서 (별표 2-2)</span>
+          </button>
 
-            return (
-              <button
-                key={item.id}
-                onClick={() => setActiveTab(item.id)}
-                className={`w-full text-left px-3 py-2.5 rounded text-xs font-medium transition-all flex items-center justify-between group court-border ${
-                  isActive
-                    ? 'bg-[#1B2E4B] text-white font-bold border-[#004E98] shadow-md ring-1 ring-blue-500/50'
-                    : 'bg-[#0A192F] text-slate-300 border-transparent hover:bg-[#102A43] hover:text-white'
-                }`}
-              >
-                <div className="flex items-center space-x-2.5 truncate">
-                  <Icon className={`w-4 h-4 flex-shrink-0 ${isActive ? 'text-amber-300' : 'text-slate-400 group-hover:text-white'}`} />
-                  <span className="truncate">{item.label}</span>
-                </div>
+          {/* Menu Item 4: 채권자 셀프신고 */}
+          <button 
+            onClick={() => setActiveTab('creditor-self')}
+            className={`w-full text-left px-4 py-2.5 flex items-center justify-between hover:bg-[#EBF0F5] transition-colors border-b border-[#E8ECEF] ${
+              activeTab === 'creditor-self' ? 'font-bold text-[#0A60C2] bg-white' : 'text-[#444444]'
+            }`}
+          >
+            <span>채권자 셀프 전자신고</span>
+          </button>
 
-                <div className="flex items-center space-x-1.5">
-                  <span className={`text-[10px] px-1.5 py-0.5 rounded font-mono font-bold ${item.badgeColor}`}>
-                    {item.badge}
-                  </span>
-                </div>
-              </button>
-            );
-          })}
+          <div className="px-4 py-2.5 text-[#666666] border-b border-[#E8ECEF]">
+            사건기록 열람
+          </div>
+          <div className="px-4 py-2.5 text-[#666666] border-b border-[#E8ECEF]">
+            전자소송 사건등록
+          </div>
+          <div className="px-4 py-2.5 text-[#666666] border-b border-[#E8ECEF]">
+            맞춤형 문서함
+          </div>
         </div>
       </div>
 
-      {/* Bottom Section: Forensic System Status */}
-      <div className="p-3 border-t border-[#1B2E4B] bg-[#060F1E] text-[11px] space-y-2">
-        <div className="flex items-center justify-between text-slate-400">
-          <span className="flex items-center gap-1 font-bold text-slate-300">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-            Chain of Custody
-          </span>
-          <span className="font-mono text-emerald-400 text-[10px] font-bold">SECURE</span>
-        </div>
-        <div className="text-[10px] text-slate-500 font-mono leading-tight">
-          SHA-256 Hash Verification Active
-          <br />
-          Official Court Compliance v3.2
-        </div>
+      {/* Footer Info */}
+      <div className="p-3 bg-[#F0F4F8] text-[10px] text-slate-500 border-t border-[#D5DBE2] font-mono leading-tight">
+        대한민국 법원 전자소송 규격 연동
+        <br />
+        서울회생법원 실무 준칙 연동 v3.2
       </div>
     </aside>
   );
