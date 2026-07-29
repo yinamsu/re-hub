@@ -12,7 +12,9 @@ import {
   DollarSign,
   Hash,
   Scale,
-  Sparkles
+  Sparkles,
+  ChevronDown,
+  ChevronUp
 } from 'lucide-react';
 import { ReconciliationRecord } from '@/types/reconciliation';
 
@@ -30,100 +32,101 @@ export const DocumentUploader: React.FC<DocumentUploaderProps> = ({
   const [parsingProgress, setParsingProgress] = useState(0);
   const [parsingStep, setParsingStep] = useState('');
   const [parsedData, setParsedData] = useState<ReconciliationRecord | null>(null);
+  const [showRawJson, setShowRawJson] = useState(false);
 
   const samplePresets = [
     {
-      label: '샘플 1: 코너스톤벤처스 (원화 투자금 채권)',
-      filename: '2025회단142_채권신고서_코너스톤.pdf',
+      label: '샘플 1: (주)대한글로벌 파트너스 (원화 대여금 채권)',
+      filename: '2025회단1000_채권신고서_대한글로벌.pdf',
       data: {
         id: `rec-parsed-${Date.now()}`,
-        caseNumber: '2025회단142',
-        caseName: '(주)알파테크놀로지 회생절차',
+        caseNumber: '2025회단1000',
+        caseName: '(주)에이치앤컴퍼니 회생절차',
         creditor: {
           id: `cred-parsed-${Date.now()}`,
-          filingNo: '회생-007',
-          creditorName: '(주)코너스톤 벤처투자',
-          bizNo: '110-86-99881',
-          address: '서울특별시 강남구 역삼동 702-1, 10층',
-          contact: '02-555-8811',
-          bankName: '국민은행',
-          accountNo: '345-910-123456',
-          claimType: '투자금 (신주인수권부사채 원리금)',
-          declaredPrincipal: 500000000,
-          declaredInterest: 18500000,
+          filingNo: '회생-006',
+          creditorName: '(주)대한글로벌 파트너스',
+          bizNo: '110-81-45678',
+          address: '서울특별시 중구 남대문로 63, 12층',
+          contact: '02-771-0099',
+          bankName: '신한은행',
+          accountNo: '110-234-567890',
+          accountHolder: '(주)대한글로벌 파트너스',
+          claimType: '대여금 채권 (단기 차입 원리금)',
+          declaredPrincipal: 850000000,
+          declaredInterest: 25500000,
           currency: 'KRW',
           exchangeRate: 1.0,
-          txId: '0x8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c',
-          txVerified: true,
-          txTimestamp: new Date().toISOString().replace('T', ' ').substring(0, 19),
-          txBlock: 19850123,
+          verificationCode: 'EFV-2025-9981241',
+          isVerified: true,
+          verifiedAt: new Date().toISOString().replace('T', ' ').substring(0, 16),
           parsedFromDocument: true,
           submittedDate: new Date().toISOString().split('T')[0],
           submissionSource: 'ADMIN_PARSED' as const,
         },
         ledger: {
-          ledgerPrincipal: 500000000,
-          ledgerInterest: 18500000,
-          ledgerTotal: 518500000,
+          ledgerPrincipal: 850000000,
+          ledgerInterest: 25500000,
+          ledgerTotal: 875500000,
           hasDiscrepancy: false,
         },
         decision: {
           status: 'PENDING' as const,
-          admittedPrincipal: 500000000,
-          admittedInterest: 18500000,
-          admittedTotal: 518500000,
+          admittedPrincipal: 850000000,
+          admittedInterest: 25500000,
+          admittedTotal: 875500000,
           deniedAmount: 0,
-          votingRightAdmitted: 518500000,
+          votingRightAdmitted: 875500000,
           reasonCode: 'FULL_ADMIT',
           reasonText: '채무자 장부 및 원증빙과 일치하여 전액 시인함',
         },
       },
     },
     {
-      label: '샘플 2: 퀀텀블록파트너스 (외화 대여금 채권)',
-      filename: '2025회단142_채권신고서_퀀텀블록.pdf',
+      label: '샘플 2: (주)글로벌크립토파트너스 (외화 대여금 정산 건)',
+      filename: '2025회단142_채권신고서_글로벌.pdf',
       data: {
         id: `rec-parsed-${Date.now()}`,
         caseNumber: '2025회단142',
-        caseName: '(주)알파테크놀로지 회생절차',
+        caseName: '(주)알파테크놀로지 회생절차 [샘플 체험용]',
         creditor: {
           id: `cred-parsed-${Date.now()}`,
           filingNo: '회생-008',
-          creditorName: 'Quantum Block Partners Inc.',
-          bizNo: '990-11-00231',
-          address: '77 Broad Street, New York, NY 10004, USA',
-          contact: '+1-212-555-0199',
-          bankName: 'CitiBank',
-          accountNo: '987-654-321098',
-          claimType: '외화대여금 (스마트 컨트랙트 담보 대출)',
-          declaredPrincipal: 1417500000, // $1,000,000 @ 1417.50
-          declaredInterest: 70875000,
+          creditorName: '(주)글로벌크립토파트너스',
+          bizNo: '220-88-98765',
+          address: '서울특별시 서초구 반포대로 90, 8층',
+          contact: '02-789-4321',
+          bankName: '하나은행',
+          accountNo: '234-567-890123',
+          accountHolder: '(주)글로벌크립토파트너스',
+          claimType: '외화대여금 (해외 정산 대출)',
+          declaredPrincipal: 850000000,
+          declaredInterest: 32000000,
           currency: 'USD',
           exchangeRate: 1417.5,
-          txId: '0x99281a8c7b6d5e4f3a2b1c0d9e8f7a6b5c4d3e2f',
-          txVerified: true,
-          txTimestamp: new Date().toISOString().replace('T', ' ').substring(0, 19),
-          txBlock: 19850999,
+          verificationCode: 'EFV-2025-142002',
+          isVerified: true,
+          verifiedAt: new Date().toISOString().replace('T', ' ').substring(0, 16),
           parsedFromDocument: true,
           submittedDate: new Date().toISOString().split('T')[0],
           submissionSource: 'ADMIN_PARSED' as const,
         },
         ledger: {
-          ledgerPrincipal: 1200000000,
-          ledgerInterest: 50000000,
-          ledgerTotal: 1250000000,
+          ledgerPrincipal: 620000000,
+          ledgerInterest: 15000000,
+          ledgerTotal: 635000000,
           hasDiscrepancy: true,
-          discrepancyReason: '외화 평가 환율 및 스마트 컨트랙트 담보 정산 차액 발생',
+          discrepancyReason: '해외 파산 정산 반영 및 평가환율 차이 발생',
         },
         decision: {
           status: 'PENDING' as const,
-          admittedPrincipal: 1200000000,
-          admittedInterest: 50000000,
-          admittedTotal: 1250000000,
-          deniedAmount: 238375000,
-          votingRightAdmitted: 1250000000,
-          reasonCode: 'FTX_DEDUCTION',
-          reasonText: '스마트 컨트랙트 담보 정산액 차감 후 잔액 시인함',
+          admittedPrincipal: 620000000,
+          admittedInterest: 15000000,
+          admittedTotal: 635000000,
+          deniedAmount: 247000000,
+          votingRightAdmitted: 635000000,
+          reasonCode: 'FOREIGN_SETTLEMENT',
+          reasonText: '해외 거래처 파산 정산액 차감 후 잔액 시인함',
         },
       },
     },
@@ -138,7 +141,7 @@ export const DocumentUploader: React.FC<DocumentUploaderProps> = ({
       { pct: 15, text: 'PDF 문서 바운딩 박스 레이아웃 및 서식 OCR 스캔 중...' },
       { pct: 40, text: '사건번호, 채권자 인적사항, 주소, 계좌번호 추출 완료' },
       { pct: 65, text: '신고 원금, 개시전 이자 및 적용 환율 검증 중...' },
-      { pct: 85, text: '금융 거래 해시 및 무결성 검증 (Verification Check)...' },
+      { pct: 85, text: '전자금융 원증빙 위변조 무결성 코드 검증 (Verification Check)...' },
       { pct: 100, text: 'AI 파싱 및 데이터 구조화 완료!' },
     ];
 
@@ -153,7 +156,7 @@ export const DocumentUploader: React.FC<DocumentUploaderProps> = ({
         setIsParsing(false);
         setParsedData(recordData);
       }
-    }, 400);
+    }, 350);
   };
 
   const handleDrop = (e: React.DragEvent) => {
@@ -171,23 +174,23 @@ export const DocumentUploader: React.FC<DocumentUploaderProps> = ({
 
   return (
     <div className="max-w-6xl mx-auto space-y-8 pb-12">
-      {/* Header Banner - Official Court Light Theme */}
-      <div className="bg-white border border-slate-300 rounded-2xl p-6 shadow-md border-t-4 border-t-blue-900 relative overflow-hidden">
+      {/* Header Banner */}
+      <div className="bg-white border border-slate-300 rounded-2xl p-6 shadow-sm border-t-4 border-t-[#1C2A45] relative overflow-hidden">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center space-x-2 text-blue-900 font-bold text-xs mb-1">
-              <Scale className="w-4 h-4 text-blue-700" />
+            <div className="flex items-center space-x-2 text-[#1C2A45] font-bold text-xs mb-1">
+              <Scale className="w-4 h-4 text-blue-800" />
               <span>Step 1. Input Engine (관재인 전용)</span>
             </div>
             <h2 className="text-2xl font-black text-slate-900">채권신고서 PDF 자동 AI 스캔 & 파싱</h2>
             <p className="text-slate-600 text-sm mt-1">
-              법원에 제출된 PDF 채권신고서 서식에서 사건번호, 채권자 인적사항, 신고 금액 및 이자 데이터를 실시간으로 데이터베이스화합니다.
+              제출된 PDF 채권신고서 서식에서 사건번호, 채권자 인적사항, 신고 금액 및 이자 데이터를 실시간으로 구조화합니다.
             </p>
           </div>
           <div className="bg-slate-50 border border-slate-200 px-4 py-3 rounded-xl flex items-center space-x-3">
-            <CheckCircle className="w-7 h-7 text-emerald-600" />
+            <CheckCircle className="w-7 h-7 text-emerald-700" />
             <div>
-              <div className="text-[11px] text-slate-500">법원 양식 전용 OCR</div>
+              <div className="text-[11px] text-slate-500">법원 제출 서식 OCR</div>
               <div className="text-sm font-bold text-slate-900">인식 정확도 99.4%</div>
             </div>
           </div>
@@ -211,7 +214,7 @@ export const DocumentUploader: React.FC<DocumentUploaderProps> = ({
                 : 'border-slate-300 hover:border-blue-600'
             }`}
           >
-            <div className="w-16 h-16 bg-blue-50 border border-blue-200 rounded-full flex items-center justify-center text-blue-900 mb-4 shadow-sm">
+            <div className="w-16 h-16 bg-blue-50 border border-blue-200 rounded-full flex items-center justify-center text-[#1C2A45] mb-4 shadow-sm">
               <Upload className="w-8 h-8" />
             </div>
 
@@ -226,7 +229,7 @@ export const DocumentUploader: React.FC<DocumentUploaderProps> = ({
               <button
                 onClick={() => handleSimulateParsing(samplePresets[0].data)}
                 disabled={isParsing}
-                className="bg-blue-900 hover:bg-blue-800 text-white font-bold text-xs px-6 py-3 rounded-xl shadow-md transition-all flex items-center space-x-2 disabled:opacity-50"
+                className="bg-[#1C2A45] hover:bg-blue-900 text-white font-bold text-xs px-6 py-3 rounded-xl shadow-md transition-all flex items-center space-x-2 disabled:opacity-50"
               >
                 <Sparkles className="w-4 h-4 text-amber-300" />
                 <span>샘플 파일 선택 및 AI 스캔 시작</span>
@@ -239,11 +242,11 @@ export const DocumentUploader: React.FC<DocumentUploaderProps> = ({
         <div className="bg-white border border-slate-300 rounded-2xl p-6 shadow-sm flex flex-col justify-between">
           <div>
             <h3 className="text-sm font-bold text-slate-900 flex items-center space-x-2 mb-3">
-              <FileText className="w-4 h-4 text-blue-800" />
+              <FileText className="w-4 h-4 text-blue-900" />
               <span>데모 신고서 문서 테스트</span>
             </h3>
             <p className="text-xs text-slate-500 mb-4">
-              미리 준비된 채권신고서 서식 데이터로 AI 파싱 엔진을 즉시 테스트해볼 수 있습니다.
+              준비된 신고서 서식 데이터로 AI 파싱 엔진을 즉시 테스트해볼 수 있습니다.
             </p>
 
             <div className="space-y-3">
@@ -272,12 +275,12 @@ export const DocumentUploader: React.FC<DocumentUploaderProps> = ({
         </div>
       </div>
 
-      {/* Parsing Animation Overlay / Loader */}
+      {/* Parsing Animation Loader */}
       {isParsing && (
         <div className="bg-white border border-blue-400 rounded-2xl p-6 shadow-lg space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3 text-blue-900">
-              <RefreshCw className="w-5 h-5 animate-spin text-blue-700" />
+              <RefreshCw className="w-5 h-5 animate-spin text-blue-800" />
               <span className="font-bold text-sm text-slate-900">{parsingStep}</span>
             </div>
             <span className="text-blue-900 font-mono font-bold text-sm">{parsingProgress}%</span>
@@ -285,7 +288,7 @@ export const DocumentUploader: React.FC<DocumentUploaderProps> = ({
 
           <div className="w-full bg-slate-100 rounded-full h-3 overflow-hidden border border-slate-200">
             <div
-              className="bg-blue-800 h-3 rounded-full transition-all duration-300"
+              className="bg-[#1C2A45] h-3 rounded-full transition-all duration-300"
               style={{ width: `${parsingProgress}%` }}
             />
           </div>
@@ -313,7 +316,7 @@ export const DocumentUploader: React.FC<DocumentUploaderProps> = ({
 
             <button
               onClick={handleSaveAndGoDashboard}
-              className="w-full sm:w-auto bg-blue-900 hover:bg-blue-800 text-white font-extrabold text-xs px-6 py-3 rounded-xl shadow-md flex items-center justify-center space-x-2 transition-all"
+              className="w-full sm:w-auto bg-[#1C2A45] hover:bg-blue-900 text-white font-extrabold text-xs px-6 py-3 rounded-xl shadow-md flex items-center justify-center space-x-2 transition-all"
             >
               <span>3-Way 시부인 대시보드에 신규 채무 추가</span>
               <ArrowRight className="w-4 h-4" />
@@ -324,7 +327,7 @@ export const DocumentUploader: React.FC<DocumentUploaderProps> = ({
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
               <div className="text-[11px] text-slate-500 flex items-center space-x-1">
-                <Hash className="w-3.5 h-3.5 text-blue-700" />
+                <Hash className="w-3.5 h-3.5 text-blue-800" />
                 <span>사건번호 / 신고번호</span>
               </div>
               <div className="text-sm font-bold text-slate-900 mt-1">
@@ -354,26 +357,47 @@ export const DocumentUploader: React.FC<DocumentUploaderProps> = ({
 
             <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
               <div className="text-[11px] text-slate-500 flex items-center space-x-1">
-                <ShieldCheck className="w-3.5 h-3.5 text-blue-700" />
-                <span>무결성 검증</span>
+                <ShieldCheck className="w-3.5 h-3.5 text-blue-800" />
+                <span>서류 무결성 검증</span>
               </div>
               <div className="mt-1 flex items-center space-x-1.5">
                 <span className="bg-emerald-100 text-emerald-800 border border-emerald-300 text-[11px] font-bold px-2 py-0.5 rounded flex items-center gap-1">
-                  <CheckCircle className="w-3 h-3 text-emerald-700" /> Verified
+                  <CheckCircle className="w-3 h-3 text-emerald-700" /> Verified Code: {parsedData.creditor.verificationCode || 'EFV-2025-9981241'}
                 </span>
               </div>
             </div>
           </div>
 
-          {/* JSON Tree Preview */}
-          <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
-            <div className="text-xs font-bold text-slate-700 mb-2 flex items-center space-x-2">
-              <Database className="w-4 h-4 text-blue-900" />
-              <span>Extracted Schema (구조화 데이터 미리보기)</span>
+          {/* Structured Summary Extraction Table */}
+          <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
+            <div className="flex justify-between items-center">
+              <div className="text-xs font-bold text-slate-800 flex items-center space-x-2">
+                <Database className="w-4 h-4 text-blue-900" />
+                <span>AI 스캔 파싱 결과 데이터 통계</span>
+              </div>
+              <button
+                onClick={() => setShowRawJson(!showRawJson)}
+                className="text-[11px] text-blue-900 font-bold hover:underline flex items-center space-x-1"
+              >
+                <span>{showRawJson ? '구조화 카드 보기' : '원문 JSON 코드 보기'}</span>
+                {showRawJson ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+              </button>
             </div>
-            <pre className="text-[11px] font-mono text-blue-950 bg-white p-4 rounded-lg overflow-x-auto border border-slate-300 max-h-56 leading-relaxed">
-              {JSON.stringify(parsedData, null, 2)}
-            </pre>
+
+            {showRawJson ? (
+              <pre className="text-[11px] font-mono text-blue-950 bg-white p-4 rounded-lg overflow-x-auto border border-slate-300 max-h-56 leading-relaxed">
+                {JSON.stringify(parsedData, null, 2)}
+              </pre>
+            ) : (
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3 text-xs bg-white p-3 rounded-lg border border-slate-200">
+                <div><span className="text-slate-500">채권자 상호:</span> <strong>{parsedData.creditor.creditorName}</strong></div>
+                <div><span className="text-slate-500">사업자/주민번호:</span> <strong className="font-mono">{parsedData.creditor.bizNo}</strong></div>
+                <div><span className="text-slate-500">연락처:</span> <strong className="font-mono">{parsedData.creditor.contact}</strong></div>
+                <div><span className="text-slate-500">채권 종류:</span> <strong>{parsedData.creditor.claimType}</strong></div>
+                <div><span className="text-slate-500">변제 계좌:</span> <strong className="font-mono">{parsedData.creditor.bankName} {parsedData.creditor.accountNo}</strong></div>
+                <div><span className="text-slate-500">검증 코드:</span> <strong className="font-mono text-blue-900">{parsedData.creditor.verificationCode}</strong></div>
+              </div>
+            )}
           </div>
         </div>
       )}

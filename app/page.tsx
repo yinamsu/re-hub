@@ -8,31 +8,40 @@ import { CourtReportExporter } from '@/components/CourtReportExporter';
 import { CreditorSelfFiling } from '@/components/CreditorSelfFiling';
 import { UserManualModal } from '@/components/UserManualModal';
 import { 
-  ReconciliationRecord 
+  ReconciliationRecord,
+  CaseInfo
 } from '@/types/reconciliation';
 import { 
   getStoredRecords, 
   saveStoredRecords, 
-  resetStoredRecords 
+  resetStoredRecords,
+  AVAILABLE_CASES
 } from '@/lib/mockData';
 import { ShieldCheck, BookOpen } from 'lucide-react';
 
 export default function Home() {
+  const [currentCase, setCurrentCase] = useState<CaseInfo>(AVAILABLE_CASES[0]);
   const [records, setRecords] = useState<ReconciliationRecord[]>([]);
   const [activeTab, setActiveTab] = useState<'upload' | 'dashboard' | 'export' | 'creditor-self'>('dashboard');
   const [isLoaded, setIsLoaded] = useState(false);
   const [showFooterManual, setShowFooterManual] = useState(false);
 
   useEffect(() => {
-    const data = getStoredRecords();
+    const data = getStoredRecords(currentCase.caseNumber);
     setRecords(data);
     setIsLoaded(true);
-  }, []);
+  }, [currentCase]);
+
+  const handleSelectCase = (caseInfo: CaseInfo) => {
+    setCurrentCase(caseInfo);
+    const data = getStoredRecords(caseInfo.caseNumber);
+    setRecords(data);
+  };
 
   const handleUpdateRecord = (updated: ReconciliationRecord) => {
     setRecords((prev) => {
       const next = prev.map((r) => (r.id === updated.id ? updated : r));
-      saveStoredRecords(next);
+      saveStoredRecords(next, currentCase.caseNumber);
       return next;
     });
   };
@@ -40,13 +49,13 @@ export default function Home() {
   const handleAddRecord = (newRecord: ReconciliationRecord) => {
     setRecords((prev) => {
       const next = [newRecord, ...prev];
-      saveStoredRecords(next);
+      saveStoredRecords(next, currentCase.caseNumber);
       return next;
     });
   };
 
   const handleResetData = () => {
-    const fresh = resetStoredRecords();
+    const fresh = resetStoredRecords(currentCase.caseNumber);
     setRecords(fresh);
   };
 
@@ -66,6 +75,8 @@ export default function Home() {
       <Header
         activeTab={activeTab}
         setActiveTab={setActiveTab}
+        currentCase={currentCase}
+        onSelectCase={handleSelectCase}
         totalRecords={records.length}
         reviewedRecords={reviewedCount}
         onResetData={handleResetData}

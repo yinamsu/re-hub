@@ -1,28 +1,274 @@
-import { ReconciliationRecord } from '@/types/reconciliation';
+import { ReconciliationRecord, CaseInfo } from '@/types/reconciliation';
 
-export const INITIAL_MOCK_RECORDS: ReconciliationRecord[] = [
+export const AVAILABLE_CASES: CaseInfo[] = [
   {
-    id: 'rec-001',
+    caseNumber: '2025회단1000',
+    caseName: '(주)에이치앤컴퍼니 회생절차',
+    courtName: '서울회생법원',
+    isSampleCase: false,
+    description: '표준 일반 회생 사건 (기본 사건)',
+  },
+  {
     caseNumber: '2025회단142',
-    caseName: '(주)알파테크놀로지 회생절차',
+    caseName: '(주)알파테크놀로지 회생절차 [샘플 체험용]',
+    courtName: '서울회생법원',
+    isSampleCase: true,
+    description: '주식회사 코너스톤벤처스 외 5개 채권자 시부인 심사 체험 샘플 케이스',
+  },
+];
+
+// DEFAULT NEUTRAL CASE: 2025회단1000 (주)에이치앤컴퍼니 회생절차
+export const DEFAULT_STANDARD_RECORDS: ReconciliationRecord[] = [
+  {
+    id: 'rec-std-001',
+    caseNumber: '2025회단1000',
+    caseName: '(주)에이치앤컴퍼니 회생절차',
     creditor: {
-      id: 'cred-001',
+      id: 'cred-std-001',
+      filingNo: '회생-001',
+      creditorName: '(주)대한글로벌 파트너스',
+      bizNo: '110-81-45678',
+      address: '서울특별시 중구 남대문로 63, 12층',
+      contact: '02-771-0099 (채권담당: 이부장)',
+      bankName: '신한은행',
+      accountNo: '110-234-567890',
+      accountHolder: '(주)대한글로벌 파트너스',
+      claimType: '대여금 채권 (단기 차입 원리금)',
+      declaredPrincipal: 1200000000,
+      declaredInterest: 36000000,
+      currency: 'KRW',
+      exchangeRate: 1.0,
+      verificationCode: 'EFV-2025-9981241',
+      isVerified: true,
+      verifiedAt: '2025-02-10 10:15',
+      parsedFromDocument: true,
+      submittedDate: '2025-02-10',
+      submissionSource: 'ADMIN_PARSED',
+    },
+    ledger: {
+      ledgerPrincipal: 1200000000,
+      ledgerInterest: 36000000,
+      ledgerTotal: 1236000000,
+      hasDiscrepancy: false,
+    },
+    decision: {
+      status: 'ADMITTED',
+      admittedPrincipal: 1200000000,
+      admittedInterest: 36000000,
+      admittedTotal: 1236000000,
+      deniedAmount: 0,
+      votingRightAdmitted: 1236000000,
+      reasonCode: 'FULL_ADMIT',
+      reasonText: '채무자 장부 및 원증빙과 일치하여 전액 시인함',
+      reviewedAt: '2025-02-12 11:00',
+    },
+  },
+  {
+    id: 'rec-std-002',
+    caseNumber: '2025회단1000',
+    caseName: '(주)에이치앤컴퍼니 회생절차',
+    creditor: {
+      id: 'cred-std-002',
+      filingNo: '회생-002',
+      creditorName: '한국산업금융 주식회사',
+      bizNo: '101-86-00987',
+      address: '서울특별시 영등포구 여의도동 16, 산은 빌딩',
+      contact: '02-787-5000',
+      bankName: '한국산업은행',
+      accountNo: '020-12-887766',
+      accountHolder: '한국산업금융 주식회사',
+      claimType: '담보부 회생채권 (공장 건물 근저당권)',
+      declaredPrincipal: 3500000000,
+      declaredInterest: 175000000,
+      currency: 'KRW',
+      exchangeRate: 1.0,
+      verificationCode: 'EFV-2025-8812049',
+      isVerified: true,
+      verifiedAt: '2025-02-10 14:30',
+      parsedFromDocument: true,
+      submittedDate: '2025-02-10',
+      submissionSource: 'ADMIN_PARSED',
+    },
+    ledger: {
+      ledgerPrincipal: 3500000000,
+      ledgerInterest: 175000000,
+      ledgerTotal: 3675000000,
+      hasDiscrepancy: false,
+    },
+    decision: {
+      status: 'ADMITTED',
+      admittedPrincipal: 3500000000,
+      admittedInterest: 175000000,
+      admittedTotal: 3675000000,
+      deniedAmount: 0,
+      votingRightAdmitted: 3675000000,
+      reasonCode: 'FULL_ADMIT',
+      reasonText: '채무자 장부 및 근저당권 등기부 일치하여 전액 시인함',
+      reviewedAt: '2025-02-12 14:20',
+    },
+  },
+  {
+    id: 'rec-std-003',
+    caseNumber: '2025회단1000',
+    caseName: '(주)에이치앤컴퍼니 회생절차',
+    creditor: {
+      id: 'cred-std-003',
+      filingNo: '회생-003',
+      creditorName: '(주)세진케미칼',
+      bizNo: '134-86-77889',
+      address: '경기도 화성시 향남읍 제약공단로 45',
+      contact: '031-352-9988',
+      bankName: '기업은행',
+      accountNo: '456-789-012345',
+      accountHolder: '(주)세진케미칼',
+      claimType: '상거래 회생채권 (원자재 납품 대금)',
+      declaredPrincipal: 450000000,
+      declaredInterest: 22500000,
+      currency: 'KRW',
+      exchangeRate: 1.0,
+      verificationCode: 'EFV-2025-7721094',
+      isVerified: true,
+      verifiedAt: '2025-02-11 09:20',
+      parsedFromDocument: true,
+      submittedDate: '2025-02-11',
+      submissionSource: 'ADMIN_PARSED',
+    },
+    ledger: {
+      ledgerPrincipal: 450000000,
+      ledgerInterest: 11250000,
+      ledgerTotal: 461250000,
+      hasDiscrepancy: true,
+      discrepancyReason: '신고 개시전 이자율(연 10%)이 약정 이자율(연 5%)을 초과 기재함',
+    },
+    decision: {
+      status: 'PARTIALLY_ADMITTED',
+      admittedPrincipal: 450000000,
+      admittedInterest: 11250000,
+      admittedTotal: 461250000,
+      deniedAmount: 11250000,
+      votingRightAdmitted: 461250000,
+      reasonCode: 'INTEREST_EXCEEDED',
+      reasonText: '개시 전 이자율 약정 초과분 부인하고 잔액 시인함',
+      reviewedAt: '2025-02-12 15:10',
+    },
+  },
+  {
+    id: 'rec-std-004',
+    caseNumber: '2025회단1000',
+    caseName: '(주)에이치앤컴퍼니 회생절차',
+    creditor: {
+      id: 'cred-std-004',
+      filingNo: '회생-004',
+      creditorName: '(주)유진로지스틱스',
+      bizNo: '211-88-12399',
+      address: '인천광역시 중구 서해대로 120, 물류센터 B동',
+      contact: '032-880-4455',
+      bankName: '국민은행',
+      accountNo: '098-765-432109',
+      accountHolder: '(주)유진로지스틱스',
+      claimType: '일반 회생채권 (화물 운송 용역비)',
+      declaredPrincipal: 150000000,
+      declaredInterest: 4500000,
+      currency: 'KRW',
+      exchangeRate: 1.0,
+      verificationCode: 'EFV-2025-6612093',
+      isVerified: false,
+      parsedFromDocument: true,
+      submittedDate: '2025-02-11',
+      submissionSource: 'ADMIN_PARSED',
+    },
+    ledger: {
+      ledgerPrincipal: 0,
+      ledgerInterest: 0,
+      ledgerTotal: 0,
+      hasDiscrepancy: true,
+      discrepancyReason: '회생-003 채권자의 청구서와 이중계상된 중복 청구 건',
+    },
+    decision: {
+      status: 'DENIED',
+      admittedPrincipal: 0,
+      admittedInterest: 0,
+      admittedTotal: 0,
+      deniedAmount: 154500000,
+      votingRightAdmitted: 0,
+      reasonCode: 'DUPLICATE_CLAIM',
+      reasonText: '동일 채권에 대한 중복신고로 전액 부인함',
+      reviewedAt: '2025-02-12 16:00',
+    },
+  },
+  {
+    id: 'rec-std-005',
+    caseNumber: '2025회단1000',
+    caseName: '(주)에이치앤컴퍼니 회생절차',
+    creditor: {
+      id: 'cred-std-005',
+      filingNo: '회생-005',
+      creditorName: '서울특별시 중구청',
+      bizNo: '201-83-00055',
+      address: '서울특별시 중구 창경궁로 17',
+      contact: '02-3396-5114 (세무과)',
+      bankName: '우리은행',
+      accountNo: '1002-999-887766',
+      accountHolder: '서울특별시 중구청',
+      claimType: '공익채권 / 조세채권 (지방세 체납액)',
+      declaredPrincipal: 68500000,
+      declaredInterest: 0,
+      currency: 'KRW',
+      exchangeRate: 1.0,
+      verificationCode: 'EFV-2025-5519023',
+      isVerified: true,
+      verifiedAt: '2025-02-12 09:00',
+      parsedFromDocument: true,
+      submittedDate: '2025-02-12',
+      submissionSource: 'ADMIN_PARSED',
+    },
+    ledger: {
+      ledgerPrincipal: 68500000,
+      ledgerInterest: 0,
+      ledgerTotal: 68500000,
+      hasDiscrepancy: false,
+    },
+    decision: {
+      status: 'ADMITTED',
+      admittedPrincipal: 68500000,
+      admittedInterest: 0,
+      admittedTotal: 68500000,
+      deniedAmount: 0,
+      votingRightAdmitted: 68500000,
+      reasonCode: 'TAX_PRIORITY',
+      reasonText: '조세 채권 공제권 행사 및 최고액 전액 시인함',
+      reviewedAt: '2025-02-12 16:45',
+    },
+  },
+];
+
+// SAMPLE DEMO CASE (OPTIONAL DEMO CASE): 2025회단142 (주)알파테크놀로지 회생절차
+export const SAMPLE_DEMO_RECORDS: ReconciliationRecord[] = [
+  {
+    id: 'rec-sample-001',
+    caseNumber: '2025회단142',
+    caseName: '(주)알파테크놀로지 회생절차 [샘플 체험용]',
+    creditor: {
+      id: 'cred-sample-001',
       filingNo: '회생-001',
       creditorName: '주식회사 코너스톤벤처스',
       bizNo: '110-86-12345',
       address: '서울특별시 강남구 테헤란로 427, 15층',
       contact: '02-555-0192 (채권담당: 김이사)',
+      bankName: '국민은행',
+      accountNo: '012-345-678901',
+      accountHolder: '주식회사 코너스톤벤처스',
       claimType: '투자금 (전환사채 원리금)',
       declaredPrincipal: 1332450000,
       declaredInterest: 45210000,
       currency: 'KRW',
       exchangeRate: 1.0,
-      txId: '0x7a8f9c2d1b4e6a3f9e8d7c6b5a4f3e2d1c0b9a8f',
-      txVerified: true,
-      txTimestamp: '2025-02-10 14:22:01',
-      txBlock: 19842105,
+      verificationCode: 'EFV-2025-142001',
+      isVerified: true,
+      verifiedAt: '2025-02-10 14:22',
       parsedFromDocument: true,
       submittedDate: '2025-02-10',
+      submissionSource: 'ADMIN_PARSED',
     },
     ledger: {
       ledgerPrincipal: 1332450000,
@@ -43,34 +289,37 @@ export const INITIAL_MOCK_RECORDS: ReconciliationRecord[] = [
     },
   },
   {
-    id: 'rec-002',
+    id: 'rec-sample-002',
     caseNumber: '2025회단142',
-    caseName: '(주)알파테크놀로지 회생절차',
+    caseName: '(주)알파테크놀로지 회생절차 [샘플 체험용]',
     creditor: {
-      id: 'cred-002',
+      id: 'cred-sample-002',
       filingNo: '회생-002',
       creditorName: '(주)글로벌크립토파트너스',
       bizNo: '220-88-98765',
       address: '서울특별시 서초구 반포대로 90, 8층',
       contact: '02-789-4321',
-      claimType: '외화대여금 (가상자산 담보 대출)',
+      bankName: '하나은행',
+      accountNo: '234-567-890123',
+      accountHolder: '(주)글로벌크립토파트너스',
+      claimType: '외화대여금 (해외 정산 대출)',
       declaredPrincipal: 850000000,
       declaredInterest: 32000000,
       currency: 'USD',
       exchangeRate: 1417.5,
-      txId: '0x3b8d1a9e7f6c5b4a3d2e1f0a9b8c7d6e5f4a3b2c',
-      txVerified: true,
-      txTimestamp: '2025-02-11 09:15:44',
-      txBlock: 19844211,
+      verificationCode: 'EFV-2025-142002',
+      isVerified: true,
+      verifiedAt: '2025-02-11 09:15',
       parsedFromDocument: true,
       submittedDate: '2025-02-11',
+      submissionSource: 'ADMIN_PARSED',
     },
     ledger: {
       ledgerPrincipal: 620000000,
       ledgerInterest: 15000000,
       ledgerTotal: 635000000,
       hasDiscrepancy: true,
-      discrepancyReason: 'FTX 파산 정산 반영 및 평가환율 차이 발생 (신고: 8.82억원 vs 장부: 6.35억원)',
+      discrepancyReason: '해외 파산 정산 반영 및 평가환율 차이 발생 (신고: 8.82억원 vs 장부: 6.35억원)',
     },
     decision: {
       status: 'PARTIALLY_ADMITTED',
@@ -79,33 +328,36 @@ export const INITIAL_MOCK_RECORDS: ReconciliationRecord[] = [
       admittedTotal: 635000000,
       deniedAmount: 247000000,
       votingRightAdmitted: 635000000,
-      reasonCode: 'FTX_DEDUCTION',
-      reasonText: 'FTX 도산 후 해외 가상자산 정산액 차감 후 잔액 시인함',
+      reasonCode: 'FOREIGN_SETTLEMENT',
+      reasonText: '해외 거래처 파산 정산액 차감 후 잔액 시인함',
       reviewedAt: '2025-02-12 11:15',
     },
   },
   {
-    id: 'rec-003',
+    id: 'rec-sample-003',
     caseNumber: '2025회단142',
-    caseName: '(주)알파테크놀로지 회생절차',
+    caseName: '(주)알파테크놀로지 회생절차 [샘플 체험용]',
     creditor: {
-      id: 'cred-003',
+      id: 'cred-sample-003',
       filingNo: '회생-003',
       creditorName: '한국투자금융 주식회사',
       bizNo: '101-81-00123',
       address: '서울특별시 영등포구 여의대로 56, 한국투자 빌딩',
       contact: '02-3771-8000',
+      bankName: '한국투자증권',
+      accountNo: '555-12-345678',
+      accountHolder: '한국투자금융 주식회사',
       claimType: '담보부 회생채권 (기계장치 근질권)',
       declaredPrincipal: 2500000000,
       declaredInterest: 125000000,
       currency: 'KRW',
       exchangeRate: 1.0,
-      txId: '0x9f8e7d6c5b4a3f2e1d0c9b8a7f6e5d4c3b2a1f0e',
-      txVerified: true,
-      txTimestamp: '2025-02-11 16:40:12',
-      txBlock: 19846002,
+      verificationCode: 'EFV-2025-142003',
+      isVerified: true,
+      verifiedAt: '2025-02-11 16:40',
       parsedFromDocument: true,
       submittedDate: '2025-02-11',
+      submissionSource: 'ADMIN_PARSED',
     },
     ledger: {
       ledgerPrincipal: 2500000000,
@@ -126,25 +378,29 @@ export const INITIAL_MOCK_RECORDS: ReconciliationRecord[] = [
     },
   },
   {
-    id: 'rec-004',
+    id: 'rec-sample-004',
     caseNumber: '2025회단142',
-    caseName: '(주)알파테크놀로지 회생절차',
+    caseName: '(주)알파테크놀로지 회생절차 [샘플 체험용]',
     creditor: {
-      id: 'cred-004',
+      id: 'cred-sample-004',
       filingNo: '회생-004',
       creditorName: '(주)미래소프트웨어',
       bizNo: '124-87-65432',
       address: '경기도 성남시 분당구 판교역로 166, 4층',
       contact: '031-700-1122',
+      bankName: '농협은행',
+      accountNo: '302-1234-5678-01',
+      accountHolder: '(주)미래소프트웨어',
       claimType: '일반 회생채권 (용역대금)',
       declaredPrincipal: 180000000,
       declaredInterest: 5400000,
       currency: 'KRW',
       exchangeRate: 1.0,
-      txId: undefined,
-      txVerified: false,
+      verificationCode: 'EFV-2025-142004',
+      isVerified: false,
       parsedFromDocument: true,
       submittedDate: '2025-02-12',
+      submissionSource: 'ADMIN_PARSED',
     },
     ledger: {
       ledgerPrincipal: 0,
@@ -166,27 +422,30 @@ export const INITIAL_MOCK_RECORDS: ReconciliationRecord[] = [
     },
   },
   {
-    id: 'rec-005',
+    id: 'rec-sample-005',
     caseNumber: '2025회단142',
-    caseName: '(주)알파테크놀로지 회생절차',
+    caseName: '(주)알파테크놀로지 회생절차 [샘플 체험용]',
     creditor: {
-      id: 'cred-005',
+      id: 'cred-sample-005',
       filingNo: '회생-005',
       creditorName: '(주)삼우물산',
       bizNo: '135-81-45678',
       address: '인천광역시 서구 가좌동 123-4',
       contact: '032-570-9900',
+      bankName: '국민은행',
+      accountNo: '888-999-000111',
+      accountHolder: '(주)삼우물산',
       claimType: '상거래 회생채권 (원자재 납품)',
       declaredPrincipal: 420000000,
       declaredInterest: 84000000,
       currency: 'KRW',
       exchangeRate: 1.0,
-      txId: '0x1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b',
-      txVerified: true,
-      txTimestamp: '2025-02-12 11:05:19',
-      txBlock: 19847120,
+      verificationCode: 'EFV-2025-142005',
+      isVerified: true,
+      verifiedAt: '2025-02-12 11:05',
       parsedFromDocument: true,
       submittedDate: '2025-02-12',
+      submissionSource: 'ADMIN_PARSED',
     },
     ledger: {
       ledgerPrincipal: 420000000,
@@ -208,27 +467,30 @@ export const INITIAL_MOCK_RECORDS: ReconciliationRecord[] = [
     },
   },
   {
-    id: 'rec-006',
+    id: 'rec-sample-006',
     caseNumber: '2025회단142',
-    caseName: '(주)알파테크놀로지 회생절차',
+    caseName: '(주)알파테크놀로지 회생절차 [샘플 체험용]',
     creditor: {
-      id: 'cred-006',
+      id: 'cred-sample-006',
       filingNo: '회생-006',
       creditorName: '서울특별시 강남구청',
       bizNo: '211-83-00001',
       address: '서울특별시 강남구 학동로 126',
       contact: '02-3423-5114 (세무2과)',
+      bankName: '우리은행',
+      accountNo: '1002-111-222333',
+      accountHolder: '서울특별시 강남구청',
       claimType: '공익채권 / 조세채권 (지방세 및 체납처분비)',
       declaredPrincipal: 95400000,
       declaredInterest: 0,
       currency: 'KRW',
       exchangeRate: 1.0,
-      txId: '0x4f5e6d7c8b9a0f1e2d3c4b5a6f7e8d9c0b1a2f3e',
-      txVerified: true,
-      txTimestamp: '2025-02-12 17:30:00',
-      txBlock: 19848050,
+      verificationCode: 'EFV-2025-142006',
+      isVerified: true,
+      verifiedAt: '2025-02-12 17:30',
       parsedFromDocument: true,
       submittedDate: '2025-02-12',
+      submissionSource: 'ADMIN_PARSED',
     },
     ledger: {
       ledgerPrincipal: 95400000,
@@ -250,32 +512,36 @@ export const INITIAL_MOCK_RECORDS: ReconciliationRecord[] = [
   },
 ];
 
-const LOCAL_STORAGE_KEY = 're_hub_records_v1';
+const LOCAL_STORAGE_KEY = 're_hub_records_v3';
+const ACTIVE_CASE_KEY = 're_hub_active_case_no';
 
-export const getStoredRecords = (): ReconciliationRecord[] => {
-  if (typeof window === 'undefined') return INITIAL_MOCK_RECORDS;
+export const getStoredRecords = (targetCaseNo?: string): ReconciliationRecord[] => {
+  if (typeof window === 'undefined') return DEFAULT_STANDARD_RECORDS;
   try {
-    const data = localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (!data) return INITIAL_MOCK_RECORDS;
+    const caseNo = targetCaseNo || localStorage.getItem(ACTIVE_CASE_KEY) || '2025회단1000';
+    const data = localStorage.getItem(`${LOCAL_STORAGE_KEY}_${caseNo}`);
+    if (!data) {
+      return caseNo === '2025회단142' ? SAMPLE_DEMO_RECORDS : DEFAULT_STANDARD_RECORDS;
+    }
     return JSON.parse(data);
   } catch (e) {
     console.error('Failed to load stored records:', e);
-    return INITIAL_MOCK_RECORDS;
+    return DEFAULT_STANDARD_RECORDS;
   }
 };
 
-export const saveStoredRecords = (records: ReconciliationRecord[]) => {
+export const saveStoredRecords = (records: ReconciliationRecord[], caseNo: string = '2025회단1000') => {
   if (typeof window === 'undefined') return;
   try {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(records));
+    localStorage.setItem(`${LOCAL_STORAGE_KEY}_${caseNo}`, JSON.stringify(records));
   } catch (e) {
     console.error('Failed to save records:', e);
   }
 };
 
-export const resetStoredRecords = (): ReconciliationRecord[] => {
+export const resetStoredRecords = (caseNo: string = '2025회단1000'): ReconciliationRecord[] => {
   if (typeof window !== 'undefined') {
-    localStorage.removeItem(LOCAL_STORAGE_KEY);
+    localStorage.removeItem(`${LOCAL_STORAGE_KEY}_${caseNo}`);
   }
-  return INITIAL_MOCK_RECORDS;
+  return caseNo === '2025회단142' ? SAMPLE_DEMO_RECORDS : DEFAULT_STANDARD_RECORDS;
 };

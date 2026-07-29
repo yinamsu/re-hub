@@ -7,20 +7,25 @@ import {
   FileSpreadsheet, 
   RotateCcw, 
   Keyboard, 
-  Building2, 
   X,
   UserCheck,
   BookOpen,
   Scale,
   Home,
   ChevronRight,
-  ShieldCheck
+  ShieldCheck,
+  Sparkles,
+  Check
 } from 'lucide-react';
 import { UserManualModal } from '@/components/UserManualModal';
+import { CaseInfo } from '@/types/reconciliation';
+import { AVAILABLE_CASES } from '@/lib/mockData';
 
 interface HeaderProps {
   activeTab: 'upload' | 'dashboard' | 'export' | 'creditor-self';
   setActiveTab: (tab: 'upload' | 'dashboard' | 'export' | 'creditor-self') => void;
+  currentCase: CaseInfo;
+  onSelectCase: (caseInfo: CaseInfo) => void;
   totalRecords: number;
   reviewedRecords: number;
   onResetData: () => void;
@@ -29,6 +34,8 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({
   activeTab,
   setActiveTab,
+  currentCase,
+  onSelectCase,
   totalRecords,
   reviewedRecords,
   onResetData,
@@ -65,7 +72,7 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
       </div>
 
-      {/* 2. Main Branding Bar (Re-Hub Original Logo) */}
+      {/* 2. Main Branding Bar */}
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
         {/* Brand & Logo */}
         <div className="flex items-center space-x-3 cursor-pointer" onClick={() => setActiveTab('dashboard')}>
@@ -83,8 +90,29 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         </div>
 
-        {/* Action Tools: Progress & Demo Reset & Shortcuts */}
+        {/* Action Tools & Sample Switcher */}
         <div className="flex items-center space-x-2.5">
+          {/* Sample Case Quick Switcher Button */}
+          {currentCase.isSampleCase ? (
+            <button
+              onClick={() => onSelectCase(AVAILABLE_CASES[0])}
+              className="flex items-center space-x-1.5 text-xs bg-emerald-50 hover:bg-emerald-100 text-emerald-900 px-3 py-1.5 rounded-lg border border-emerald-300 font-bold transition-all shadow-sm"
+              title="표준 기본 사건으로 돌아가기"
+            >
+              <Check className="w-3.5 h-3.5 text-emerald-700" />
+              <span>[샘플 모드 중] 기본 사건으로 전환</span>
+            </button>
+          ) : (
+            <button
+              onClick={() => onSelectCase(AVAILABLE_CASES[1])}
+              className="flex items-center space-x-1.5 text-xs bg-amber-50 hover:bg-amber-100 text-amber-900 px-3 py-1.5 rounded-lg border border-amber-300 font-bold transition-all shadow-sm"
+              title="2025회단142 샘플 체험 사건 불러오기"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-amber-700" />
+              <span>🧪 샘플 사건 불러오기 (2025회단142)</span>
+            </button>
+          )}
+
           {/* Progress Gauge */}
           <div className="hidden lg:flex items-center space-x-3 bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-lg">
             <div className="text-right">
@@ -117,7 +145,7 @@ export const Header: React.FC<HeaderProps> = ({
             className="flex items-center space-x-1 text-xs bg-rose-50 hover:bg-rose-100 text-rose-800 px-3 py-1.5 rounded-md border border-rose-200 transition-colors font-semibold"
           >
             <RotateCcw className="w-3.5 h-3.5 text-rose-700" />
-            <span className="hidden sm:inline">데모 리셋</span>
+            <span className="hidden sm:inline">리셋</span>
           </button>
         </div>
       </div>
@@ -185,22 +213,47 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
       </div>
 
-      {/* 4. Sub Breadcrumb Bar */}
-      <div className="bg-[#F1F3F6] border-b border-slate-300 py-1.5 px-4 text-xs text-slate-600">
+      {/* 4. Sub Breadcrumb & Case Selector Dropdown Bar */}
+      <div className="bg-[#F1F3F6] border-b border-slate-300 py-2 px-4 text-xs text-slate-600">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center space-x-1.5">
+          <div className="flex items-center space-x-2">
             <Home className="w-3.5 h-3.5 text-slate-500" />
             <ChevronRight className="w-3 h-3 text-slate-400" />
             <span>회생 사건</span>
             <ChevronRight className="w-3 h-3 text-slate-400" />
-            <span className="font-bold text-[#1C2A45]">사건번호: 2025회단142 (주)알파테크놀로지 회생절차</span>
-            <span className="bg-[#1C2A45] text-white text-[10px] px-1.5 py-0.2 rounded font-bold ml-1">
-              서울회생법원
+            
+            {/* Case Selector Dropdown */}
+            <div className="relative inline-block">
+              <select
+                value={currentCase.caseNumber}
+                onChange={(e) => {
+                  const target = AVAILABLE_CASES.find((c) => c.caseNumber === e.target.value);
+                  if (target) onSelectCase(target);
+                }}
+                className="bg-white border border-slate-300 rounded px-2.5 py-1 text-xs font-bold text-[#1C2A45] cursor-pointer focus:outline-none focus:border-blue-700 shadow-sm"
+              >
+                {AVAILABLE_CASES.map((c) => (
+                  <option key={c.caseNumber} value={c.caseNumber}>
+                    {c.isSampleCase ? '🧪 [샘플 사건] ' : '📁 [기본 사건] '}
+                    {c.caseNumber} {c.caseName}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <span className="bg-[#1C2A45] text-white text-[10px] px-1.5 py-0.5 rounded font-bold">
+              {currentCase.courtName}
             </span>
           </div>
 
           <div className="text-[11px] text-slate-500 font-mono hidden md:block">
-            Re-Hub Insolvency Administration Platform
+            {currentCase.isSampleCase ? (
+              <span className="text-amber-800 font-bold bg-amber-100 px-2 py-0.5 rounded border border-amber-300">
+                ⚠️ 체험용 샘플 데이터 모드 작동 중
+              </span>
+            ) : (
+              <span>표준 실무 사건 모드</span>
+            )}
           </div>
         </div>
       </div>
@@ -276,10 +329,10 @@ export const Header: React.FC<HeaderProps> = ({
           <div className="bg-white border border-slate-300 rounded-xl p-6 max-w-md w-full shadow-2xl text-slate-900">
             <div className="flex items-center space-x-3 text-rose-600 pb-3 border-b border-slate-200">
               <RotateCcw className="w-5 h-5" />
-              <h3 className="text-base font-bold">시뮬레이션 데이터 리셋</h3>
+              <h3 className="text-base font-bold">사건 데이터 리셋</h3>
             </div>
             <p className="mt-3 text-xs text-slate-600 leading-relaxed">
-              모든 시부인 변경사항 및 신고 내역이 초기 더미 데이터 (2025회단142 사건 6개 채권) 상태로 복원됩니다. 계속하시겠습니까?
+              현재 선택된 사건 ({currentCase.caseNumber} {currentCase.caseName})의 모든 시부인 변경사항 및 신고 내역이 초기 상태로 복원됩니다. 계속하시겠습니까?
             </p>
 
             <div className="mt-6 flex justify-end space-x-3">

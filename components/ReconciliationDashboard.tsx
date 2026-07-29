@@ -34,7 +34,7 @@ export const ReconciliationDashboard: React.FC<ReconciliationDashboardProps> = (
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterTab, setFilterTab] = useState<'ALL' | 'PENDING' | 'ADMITTED' | 'DENIED' | 'DISCREPANCY'>('ALL');
-  const [showTxModal, setShowTxModal] = useState(false);
+  const [showVerificationModal, setShowVerificationModal] = useState(false);
   const [saveToast, setSaveToast] = useState(false);
 
   // Filtered list based on search & tab
@@ -176,7 +176,7 @@ export const ReconciliationDashboard: React.FC<ReconciliationDashboardProps> = (
 
   if (!currentRecord) {
     return (
-      <div className="p-12 text-center text-slate-500 font-medium">
+      <div className="p-12 text-center text-slate-500 font-medium bg-white rounded-2xl border border-slate-300 shadow-sm">
         검색 조건에 맞는 채권 심사 내역이 없습니다.
       </div>
     );
@@ -187,7 +187,7 @@ export const ReconciliationDashboard: React.FC<ReconciliationDashboardProps> = (
 
   return (
     <div className="space-y-6 pb-16">
-      {/* Top Controls & Navigation Bar - Court Style */}
+      {/* Top Controls & Navigation Bar */}
       <div className="bg-white border border-slate-300 rounded-xl p-4 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
         {/* Left: Current Creditor Index & Quick Switcher */}
         <div className="flex items-center space-x-3 w-full md:w-auto">
@@ -215,7 +215,7 @@ export const ReconciliationDashboard: React.FC<ReconciliationDashboardProps> = (
           <div>
             <h2 className="text-base font-extrabold text-slate-900 flex items-center gap-2">
               <span>{creditor.creditorName}</span>
-              <span className="text-xs font-mono text-blue-900 font-extrabold bg-blue-50 border border-blue-200 px-2 py-0.5 rounded">
+              <span className="text-xs font-mono text-[#1C2A45] font-extrabold bg-blue-50 border border-blue-200 px-2 py-0.5 rounded">
                 {creditor.filingNo}
               </span>
               {creditor.submissionSource === 'CREDITOR_SELF' && (
@@ -291,7 +291,7 @@ export const ReconciliationDashboard: React.FC<ReconciliationDashboardProps> = (
         <div className="lg:col-span-3 bg-white border border-slate-300 rounded-2xl p-4 shadow-sm space-y-2 max-h-[640px] overflow-y-auto">
           <div className="text-xs font-bold text-slate-700 px-2 pb-2 border-b border-slate-200 flex justify-between items-center">
             <span>채권자 목록 ({filteredRecords.length})</span>
-            <span className="text-[10px] text-slate-500 font-mono">2025회단142</span>
+            <span className="text-[10px] text-slate-500 font-mono">{currentRecord.caseNumber}</span>
           </div>
 
           <div className="space-y-1.5 pt-1">
@@ -450,28 +450,24 @@ export const ReconciliationDashboard: React.FC<ReconciliationDashboardProps> = (
               </div>
             </div>
 
-            {/* Web3 Verification Badge */}
+            {/* Electronic Verification Code Box */}
             <div className="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-2">
               <div className="flex items-center justify-between text-xs">
                 <span className="text-slate-700 font-bold flex items-center gap-1">
-                  <ShieldCheck className="w-4 h-4 text-blue-800" /> 서류 무결성 검증
+                  <ShieldCheck className="w-4 h-4 text-blue-800" /> 전자 서류 무결성 검증
                 </span>
                 <span className="bg-emerald-100 text-emerald-800 border border-emerald-300 text-[10px] font-bold px-2 py-0.5 rounded">
                   Verified
                 </span>
               </div>
 
-              {creditor.txId ? (
-                <button
-                  onClick={() => setShowTxModal(true)}
-                  className="w-full text-left text-[11px] font-mono text-blue-900 hover:text-blue-700 truncate bg-white p-2 rounded border border-slate-300 flex items-center justify-between group"
-                >
-                  <span className="truncate">{creditor.txId}</span>
-                  <ExternalLink className="w-3.5 h-3.5 text-slate-500 group-hover:text-blue-700 flex-shrink-0" />
-                </button>
-              ) : (
-                <div className="text-[11px] text-slate-500 italic">스마트 서식 전자 검증 완료</div>
-              )}
+              <button
+                onClick={() => setShowVerificationModal(true)}
+                className="w-full text-left text-[11px] font-mono text-blue-900 hover:text-blue-700 truncate bg-white p-2 rounded border border-slate-300 flex items-center justify-between group shadow-sm"
+              >
+                <span className="font-bold">{creditor.verificationCode || 'EFV-2025-9981241'}</span>
+                <ExternalLink className="w-3.5 h-3.5 text-slate-500 group-hover:text-blue-700 flex-shrink-0" />
+              </button>
             </div>
           </div>
 
@@ -620,49 +616,49 @@ export const ReconciliationDashboard: React.FC<ReconciliationDashboardProps> = (
         </div>
       </div>
 
-      {/* Web3 Transaction Details Modal */}
-      {showTxModal && (
+      {/* Verification Code Details Modal */}
+      {showVerificationModal && (
         <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-white border border-slate-300 rounded-2xl p-6 max-w-lg w-full shadow-2xl space-y-4 text-slate-900">
             <div className="flex items-center justify-between pb-3 border-b border-slate-200">
               <div className="flex items-center space-x-2 text-blue-900">
                 <ShieldCheck className="w-6 h-6 text-emerald-600" />
-                <h3 className="font-extrabold text-base">온체인 서류 무결성 검증서</h3>
+                <h3 className="font-extrabold text-base">전자 서류 무결성 검증서</h3>
               </div>
-              <button onClick={() => setShowTxModal(false)} className="text-slate-400 hover:text-slate-700">
+              <button onClick={() => setShowVerificationModal(false)} className="text-slate-400 hover:text-slate-700">
                 ✕
               </button>
             </div>
 
             <div className="space-y-3 text-xs">
               <div className="bg-slate-50 p-3 rounded-xl border border-slate-200">
-                <div className="text-slate-500 font-medium">Transaction Hash (TxID)</div>
-                <div className="font-mono text-blue-900 font-bold break-all mt-1">{creditor.txId}</div>
+                <div className="text-slate-500 font-medium">검증 고유 코드 (Verification Code)</div>
+                <div className="font-mono text-blue-900 font-extrabold text-sm mt-1">{creditor.verificationCode || 'EFV-2025-9981241'}</div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div className="bg-slate-50 p-3 rounded-xl border border-slate-200">
-                  <div className="text-slate-500 font-medium">Block Height</div>
-                  <div className="font-mono text-slate-900 font-bold mt-0.5">#{creditor.txBlock || 19842105}</div>
+                  <div className="text-slate-500 font-medium">검증 일시</div>
+                  <div className="font-mono text-slate-900 font-bold mt-0.5">{creditor.verifiedAt || '2025-02-10 14:22'}</div>
                 </div>
                 <div className="bg-slate-50 p-3 rounded-xl border border-slate-200">
-                  <div className="text-slate-500 font-medium">Timestamp</div>
-                  <div className="font-mono text-slate-900 font-bold mt-0.5">{creditor.txTimestamp || '2025-02-10 14:22:01'}</div>
+                  <div className="text-slate-500 font-medium">검증 기관 / 엔진</div>
+                  <div className="font-mono text-slate-900 font-bold mt-0.5">Re-Hub E-Legal OCR</div>
                 </div>
               </div>
 
               <div className="bg-emerald-50 border border-emerald-300 p-3 rounded-xl flex items-center space-x-2 text-emerald-900">
                 <CheckCircle2 className="w-5 h-5 text-emerald-700 flex-shrink-0" />
                 <span className="text-[11px] leading-snug">
-                  신고서에 기재된 금융 거래 해시가 이더리움 블록체인 노드의 스마트 컨트랙트 원장과 100% 위변조 없이 일치함이 검증되었습니다.
+                  제출된 세금계산서, 계약서 스캔 파일 및 인감증명 원증빙이 전자금융보안 무결성 규격과 100% 일치함이 검증되었습니다.
                 </span>
               </div>
             </div>
 
             <div className="pt-2 text-right">
               <button
-                onClick={() => setShowTxModal(false)}
-                className="bg-blue-900 hover:bg-blue-800 text-white font-bold text-xs px-5 py-2 rounded-xl transition-colors"
+                onClick={() => setShowVerificationModal(false)}
+                className="bg-[#1C2A45] hover:bg-blue-900 text-white font-bold text-xs px-5 py-2 rounded-xl transition-colors"
               >
                 창 닫기
               </button>
