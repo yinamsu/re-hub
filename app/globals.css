@@ -6,38 +6,60 @@
 
 :root {
   --font-pretendard: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
-  --court-navy: #1C2A45;
+  --court-navy: #1B2E4B;
+  --court-dark-navy: #0A192F;
   --court-blue: #004E98;
-  --court-tab-bg: #F1F3F6;
-  --court-tab-border: #D5DBE2;
-  --court-footer-top: #363D48;
-  --court-footer-bottom: #2B303A;
+  --court-bg: #F8FAFC;
+  --court-panel: #F1F5F9;
+  --court-border: #CBD5E1;
+  --court-crimson: #C53030;
+  --court-amber: #D69E2E;
+  --court-green: #2F855A;
 }
 
 body {
   font-family: var(--font-pretendard);
-  background-color: #F8F9FA;
+  background-color: var(--court-bg);
   color: #1E293B;
   -webkit-font-smoothing: antialiased;
 }
 
+/* Sharp, Dense Supreme Court Border Utility */
+.court-border {
+  border: 1px solid var(--court-border);
+}
+
+.court-card {
+  background-color: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  border-radius: 4px;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+}
+
+.court-table-header {
+  background-color: #1B2E4B;
+  color: #FFFFFF;
+  font-weight: 700;
+  font-size: 12px;
+}
+
 /* Official Court Portal Scrollbar */
 ::-webkit-scrollbar {
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #F1F3F6;
+  background: #F1F5F9;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #CBD5E1;
-  border-radius: 4px;
+  background: #94A3B8;
+  border-radius: 2px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #94A3B8;
+  background: #64748B;
 }
 
 /* Remove Number Spinner */
